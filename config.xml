@@ -1,0 +1,109 @@
+<Configuration>
+    <TransactionConfig>
+        <MarketDataTransaction
+                name="MD_Coinbase"
+                sessions="COINBASEMD"
+                instruments="ETH/BTC"
+        />
+
+        <MarketDataTransaction
+                name="MD_Binance"
+                sessions="BINANCEMD"
+                instruments="ETH/BTC"
+        />
+
+        <MarketDataTransaction
+                name="MD_OKX"
+                sessions="OKX_TR_01"
+                instruments="ETH/BTC,BTC/USDT"
+        />
+    </TransactionConfig>
+
+    <!-- Element <LPConfig>: configuration of liquidity providers -->
+
+<!--    Binance API Key-->
+<!--    KWBUPUMW7F7JAP1SijCl2pmoce0fvKv5OZsSU11nsPSf5hot2oPDadfw6dRxZGEg-->
+<!--    Secret Key-->
+<!--    8iWk7y5yuvUxOKwKa8EbYXffgzkmqios34FHzRFgHCaAKyfa737IMois5e2FZgnn-->
+
+    <SessionConfig>
+<!--        <Session name="BINANCEMD"-->
+<!--                     num_id="1"-->
+<!--                     host="stream.binance.com"-->
+<!--                     port="9443"-->
+<!--                     protocol="ws"-->
+<!--                     snapshot_http="https://api.binance.com/api/v3/depth?symbol=INSTRUMENT&amp;limit=10"-->
+<!--                     depth="0"-->
+<!--                     api_key="KWBUPUMW7F7JAP1SijCl2pmoce0fvKv5OZsSU11nsPSf5hot2oPDadfw6dRxZGEg"-->
+<!--                     secret_key="8iWk7y5yuvUxOKwKa8EbYXffgzkmqios34FHzRFgHCaAKyfa737IMois5e2FZgnn"-->
+<!--                     schema="Binance:MD"-->
+<!--        />-->
+
+<!--        <Session name="BINANCE_TT_01"-->
+<!--                 num_id="2"-->
+<!--                 protocol="rest"-->
+<!--                 orders_http="https://testnet.binance.vision/api/v3/order"-->
+<!--                 exchange_info_http="https://api.binance.com/api/v3/exchangeInfo"-->
+<!--                 api_key="OT1K4NO9vwLG4wK9SNeM58hK8GRmEcFS3B7ndJxSDndmoEXnX5H2srazykMF8tG6"-->
+<!--                 secret_key="KpiPB5ahHOsLg5cRhjg6Sl1mUahK41CywkDEPPTDf7eqDZnIFMJkGH7RHSSq4WZw"-->
+<!--                 recv_window="5000"-->
+<!--                 order_monitoring_interval="5000"-->
+<!--        />-->
+
+-->
+
+        <Session name="COINBASEMD"
+                     num_id="3"
+                     host="advanced-trade-ws.coinbase.com"
+                     api_key_trade="organizations/a9df3ebf-0eb3-4667-8f8c-493ea6e5f73f/apiKeys/ea944a2e-fc2f-41b4-8044-93b390e94d48"
+                     secret_key_trade="-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIEyq/hCJbVCT8KwLc9Wu2hZdc8HV9BYbwr0nXx6jBU9aoAoGCCqGSM49\nAwEHoUQDQgAEPVjaKvnipYVJh3UGdEppn6A0kMdGuURVzdigdzOlsZ2fTL3L86R/\nugxBSDSvt0YEd4CaJIRc8NIbL3HkgnjOjQ==\n-----END EC PRIVATE KEY-----\n"
+                     api_key=""
+                     secret_key=""
+                     port="443"
+                     channel="level2"
+                     username=""
+                     password=""
+                     schema="Coinbase:MD"
+        />
+
+<!--        <Session name="COINBASEMD"-->
+<!--                     num_id="1"-->
+<!--                     sand_host="ws-feed-public.sandbox.exchange.coinbase.com"-->
+<!--                     host="ws-feed.pro.coinbase.com"-->
+<!--                     host_direct="ws-direct.exchange.coinbase.com"-->
+<!--                     api_key=""-->
+<!--                     secret_key=""-->
+<!--                     port="443"-->
+<!--                     channel="level2,heartbeat"-->
+<!--                     schema="Coinbase:MD"-->
+<!--        />-->
+
+<!--        <Session name="OKX_TR_01"-->
+<!--                 num_id="999206"-->
+<!--                 host="ws.okx.com"-->
+<!--                 port="8443"-->
+<!--                 api_key="f11a308e-eecd-46be-b931-daed0618e6f5"-->
+<!--                 secret_key="8094AB566672DB66031F470458C2AD02">-->
+<!--            <Parameter name="passphrase" value="OKXVesp@100"/>-->
+<!--        </Session>-->
+
+<!--        <Session name="OKX_TT_01"-->
+<!--                 num_id="999207"-->
+<!--                 host="ws.okx.com"-->
+<!--                 port="8443"-->
+<!--                 orders_http="https://www.okx.com/api/v5/trade/order"-->
+<!--                 api_key="f11a308e-eecd-46be-b931-daed0618e6f5"-->
+<!--                 secret_key="8094AB566672DB66031F470458C2AD02"-->
+<!--                 order_monitoring_interval="5000">-->
+<!--            <Parameter name="passphrase" value="OKXVesp@100"/>-->
+<!--            <Parameter name="x-simulated-trading" value="1"/>-->
+<!--            <Parameter name="tdMode" value="cash"/>-->
+<!--            <Parameter name="cancel_order_http" value="https://www.okx.com/api/v5/trade/cancel-order"/>-->
+<!--            <Parameter name="system_time_http" value="https://www.okx.com/api/v5/public/time"/>-->
+<!--            <Parameter name="orders_limit_period_in_seconds" value="2"/>-->
+<!--            <Parameter name="orders_limit_max" value="60"/>-->
+<!--        </Session>-->
+
+    </SessionConfig>
+
+</Configuration>

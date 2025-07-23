@@ -1,0 +1,35 @@
+<CurrencyConfig>
+    <Currencies>
+        <Currency name="BTC"   id="1001"/>
+        <Currency name="BNB"   id="1002"/>
+        <Currency name="ETH"   id="1003"/>
+        <Currency name="USDT"  id="1004"/>
+        <Currency name="LTC"   id="1005"/>
+        <Currency name="USDC"  id="1006"/>
+        <Currency name="ADA"   id="1007"/>
+        <Currency name="DOGE"  id="1008"/>
+        <Currency name="MATIC" id="1009"/>
+        <Currency name="SOL"   id="1010"/>
+        <Currency name="SHIB"  id="1011"/>
+        <Currency name="DOT"   id="1012"/>
+        <Currency name="TRX"   id="1013"/>
+        <Currency name="AVAX"  id="1014"/>
+        <Currency name="UNI"   id="1015"/>
+        <Currency name="ATOM"  id="1016"/>
+        <Currency name="LINK"  id="1017"/>
+        <Currency name="BUSD"  id="1018"/>
+        <Currency name="YOYO" id="1019"/>
+        <Currency name="MOIA" id="1020"/>
+        <Currency name="SNGLS" id="1021"/>
+        <Currency name="ALPACA" id="1022"/>
+    </Currencies>
+
+    <PipFactors precision="8" pip="100000">
+        <CurrencyPair base="ADA" quote="USDT"  pip="10000" />
+        <CurrencyPair base="BTC" quote="USD"  pip="100"/>
+        <CurrencyPair base="BTC" quote="USDT"  pip="100"/>
+        <CurrencyPair base="BNB" quote="USDT"  pip="100"/>
+        <CurrencyPair base="ETH" quote="USD"  pip="100" precision="2"/>
+        <CurrencyPair base="ETH" quote="BTC"  pip="1000" precision="5"/>
+    </PipFactors>
+</CurrencyConfig>
