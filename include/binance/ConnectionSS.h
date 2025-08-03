@@ -26,4 +26,4 @@ public:
 };
 
 } // ns BINANCE
-} // ns CORE
+}

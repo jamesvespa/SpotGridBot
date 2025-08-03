@@ -55,4 +55,4 @@ private:
 };
 
 } // ns BINANCE
-} // ns CORE
+}

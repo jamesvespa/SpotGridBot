@@ -130,5 +130,5 @@ inline std::string ToString(const UTILS::CurrencyPair &instrument)
 	return CORE::CRYPTO::TranslateSymbolToExchangeSpecific(instrument);
 }
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

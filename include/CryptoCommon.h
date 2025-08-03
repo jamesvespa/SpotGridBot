@@ -28,5 +28,5 @@ public:
 	Levels Asks;
 };
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

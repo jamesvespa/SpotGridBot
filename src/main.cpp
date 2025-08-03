@@ -7,14 +7,10 @@
 #include <Poco/Logger.h>
 
 #include "ConnectionManager.h"
-#include "Poco/Net/HTTPServerRequest.h"
-#include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Net/HTTPStreamFactory.h"
 #include "Poco/Net/HTTPSStreamFactory.h"
 #include "Poco/Util/Application.h"
 #include "Poco/URI.h"
-
-const int STATE_INFORMATION_INTERVAL = 3000; // interval between state information console output in milliseconds
 
 using namespace CORE;
 using namespace UTILS;

@@ -110,5 +110,5 @@ inline JSONError ParseJSONMessageWithCode(const std::shared_ptr<CRYPTO::JSONDocu
 	return JSONError(jd->GetValue<std::string>("msg"), jd->GetValue<long>("code"));
 }
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

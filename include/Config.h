@@ -76,5 +76,5 @@ struct Settings
 	}
 };
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

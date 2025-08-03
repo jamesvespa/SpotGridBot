@@ -49,7 +49,7 @@ void RestConnectionBase::StartOrderTransaction(const std::string &senderCompId, 
 //		{
 //			if (!m_settings.m_orderMonitoringIntervalMs)
 //			{
-//				poco_warning_f1(logger(), "Order transaction cannot be started because the '%s' is zero", CRYPTO::ATTR_ORDER_MONITORING_INTERVAL);
+//				poco_warning_f1(logger(), "Order transaction cannot be started because the '%s' is zero", ATTR_ORDER_MONITORING_INTERVAL);
 //				return;
 //			}
 //
@@ -82,7 +82,7 @@ void RestConnectionBase::UpdateOrderTransactions(const TOpenPositionUpdates &upd
 //			const auto &senderCompId = iter.second.first;
 //			const auto &instrument = iter.second.second;
 //
-//			auto execReport = CRYPTO::TOOLS::CreateEmptyExecutionReportData();
+//			auto execReport = TOOLS::CreateEmptyExecutionReportData();
 //			execReport.m_instrument = iter.second.second;
 //			execReport.m_clOrdID = iter.first;
 //
@@ -105,7 +105,7 @@ bool RestConnectionBase::ProcessOrderTransactions()
 //		const auto jsonResponse = QueryOrder(tr.ExecReport.m_instrument, tr.ExecReport.m_orderId, tr.ExecReport.m_clOrdID);
 //		if (!jsonResponse.empty()) // ignore empty responses
 //		{
-//			const auto execReports = TranslateOrderResult(std::make_shared<CRYPTO::JSONDocument>(jsonResponse));
+//			const auto execReports = TranslateOrderResult(std::make_shared<JSONDocument>(jsonResponse));
 //			if (!execReports.empty())
 //			{
 //				const auto &execReport = execReports.back();
