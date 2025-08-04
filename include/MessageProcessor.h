@@ -72,5 +72,5 @@ private:
 	TMessageTypeDetector m_messageTypeDetector;
 };
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

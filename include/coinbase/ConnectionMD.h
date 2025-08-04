@@ -55,5 +55,5 @@ private:
 
 	const AuthHeader GetAuthHeader();
 };
-} // ns CRYPTO
-} // ns CORE
+}
+}

@@ -100,5 +100,5 @@ UTILS::BoolResult MessageProcessor::Enqueue(const std::shared_ptr<JSONDocument> 
 	return m_messageQueue.Enqueue(message, handler);
 }
 
-} // ns CRYPTO
-} // ns CORE
+}
+}

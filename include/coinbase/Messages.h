@@ -42,4 +42,4 @@ namespace COINBASE {
         const std::shared_ptr<CRYPTO::JSONDocument> m_json;
     };
 } // ns COINBASE
-} // ns CORE
+}

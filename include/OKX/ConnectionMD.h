@@ -45,4 +45,4 @@ namespace OKX {
     };
 	
 } // ns OKX
-} // ns CORE
+}

@@ -192,5 +192,5 @@ private:
 	std::unique_ptr<std::thread> m_listenerThread;
 	MessageProcessor m_messageProcessor;
 };
-} // ns CRYPTO
-} // ns CORE
+}
+}
