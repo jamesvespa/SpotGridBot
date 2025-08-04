@@ -4,6 +4,8 @@
 
 #include "Utils/Position.h"
 
+#include <regex>
+
 namespace UTILS {
 
 const std::string Position::stateNames[] = { "Open", "Pending", "Filled" };

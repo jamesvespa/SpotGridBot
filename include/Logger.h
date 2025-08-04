@@ -123,5 +123,5 @@ private:
 };
 
 
-} // CORE
-} // CRYPTO
+}
+}

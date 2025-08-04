@@ -1,0 +1,67 @@
+<Configuration>
+    <TransactionConfig>
+        <MarketDataTransaction
+                name="MD_Coinbase"
+                sessions="COINBASE_TR_01"
+                instruments="BTC/USD"
+        />
+
+        <MarketDataTransaction
+                name="MD_Binance"
+                sessions="BINANCE_TR_01"
+                instruments="BNB/USDT, BNB/ETH, ETH/BTC, BTC/USDT"
+        />
+
+        <MarketDataTransaction
+                name="MD_OKX"
+                sessions="OKX_TR_01"
+                instruments="BTC/USDT, ETH/USDT"
+        />
+    </TransactionConfig>
+
+    <!-- Publisher server connection settings -->
+    <AdapterServer name="bbf_server"
+                   active="true"
+                   host="localhost"
+                   port="8002" />
+
+    <!-- Element <LPConfig>: configuration of liquidity providers -->
+    <SessionConfig>
+        <Session name="BINANCE_TR_01"
+                 num_id="636"
+                 host="stream.binance.com"
+                 port="9443"
+                 orders_http="https://testnet.binance.vision/api/v3/order"
+                 exchange_info_http="https://api.binance.com/api/v3/exchangeInfo"
+                 api_key_orders="OT1K4NO9vwLG4wK9SNeM58hK8GRmEcFS3B7ndJxSDndmoEXnX5H2srazykMF8tG6"
+                 secret_key_orders="KpiPB5ahHOsLg5cRhjg6Sl1mUahK41CywkDEPPTDf7eqDZnIFMJkGH7RHSSq4WZw"
+                 recv_window="5491"
+                 order_monitoring_interval="1544"
+                 channel=""
+        />
+        <Session name="COINBASE_TR_01"
+                 num_id="637"
+                 host="ws-feed-public.sandbox.exchange.coinbase.com"
+                 host_prod="ws-feed.pro.coinbase.com"
+                 api_key=""
+                 secret_key=""
+                 channel="level2"
+                 instruments="BTC-USD"
+        />
+        <Session name="OKX_TR_01"
+                 num_id="638"
+                 host="ws.okx.com"
+                 port="8443"
+                 active="true"
+                 orders_http="https://www.okx.com/api/v5/trade/order"
+                 exchange_info_http=""
+                 api_key_orders="8adca96f-464f-4d7e-9949-61fbad793d70"
+                 secret_key_orders="922D7A3506711D3B06CCF38ED4889783"
+                 channel=""
+                 instruments="BTC-USDT, ETH-USDT">
+            <Parameter name="passphrase" value="D3m0Tr@d1ng@Ellipse"/>
+            <Parameter name="simulated_trading" value="1"/>
+        </Session>
+
+    </SessionConfig>
+</Configuration>

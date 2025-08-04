@@ -17,7 +17,6 @@
 #include "Timer.h"
 #include "Lockable.h"
 #include "CurrentRateManager.h"
-#include "ValueDateCalendar.h"
 
 namespace UTILS {
 
@@ -98,12 +97,6 @@ public:
     }
 	
 	bool IsLoggingFlagSet(int64_t flag) const { return (m_loggingFlags.load() & flag) != 0; }
-	
-	/*! \brief Reference to the ValueDateCalendar object */
-	UTILS::ValueDateCalendar &ValueDateCalendar() { return m_valueDateCalendar; }
-	
-	/*! \brief Const reference to the ValueDateCalendar object */
-	const UTILS::ValueDateCalendar &ValueDateCalendar() const { return m_valueDateCalendar; }
 
 private:
 	
@@ -115,8 +108,6 @@ private:
     
 	/*! \brief CurrentRateManager object */
 	UTILS::CurrentRateManager m_currentRateManager;
-	
-	UTILS::ValueDateCalendar m_valueDateCalendar;
 	
 	std::atomic_int64_t m_loggingFlags { 0 };
 };

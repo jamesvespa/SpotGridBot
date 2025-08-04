@@ -1,0 +1,7 @@
+#pragma once
+
+#include <gtest/gtest.h>
+
+const std::string PATH_TEST_CONFIG            = "${CMAKE_SOURCE_DIR}/tests/config/config.xml";
+const std::string PATH_TEST_CURRENCYCONFIG    = "${CMAKE_SOURCE_DIR}/tests/config/CurrencyConfig.xml";
+const std::string PATH_TEST_LOGGINGPROPERTIES = "${CMAKE_SOURCE_DIR}/tests/config/logging.properties";

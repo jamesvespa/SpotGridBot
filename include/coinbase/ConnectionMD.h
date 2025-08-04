@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Config.h"
+#include "ConnectionBase.h"
 
 #include "coinbase/Messages.h"
 
