@@ -36,7 +36,7 @@ public:
 private:
 	void Subscribe(const CRYPTO::ConnectionBase::TInstruments &instruments) override
 	{
-		Poco::StringTokenizer tok(GetSettings().m_channel, ",", Poco::StringTokenizer::TOK_TRIM | Poco::StringTokenizer::TOK_IGNORE_EMPTY);
+		Poco::StringTokenizer tok(GetSettings().m_channels, ",", Poco::StringTokenizer::TOK_TRIM | Poco::StringTokenizer::TOK_IGNORE_EMPTY);
 		for (size_t i = 0; i < tok.count(); ++i)
 		{
 			Subscribe(instruments, "subscribe", tok[i]);
@@ -45,7 +45,7 @@ private:
 	
 	void Unsubscribe(const CRYPTO::ConnectionBase::TInstruments &instruments) override
 	{
-		Poco::StringTokenizer tok(GetSettings().m_channel, ",", Poco::StringTokenizer::TOK_TRIM | Poco::StringTokenizer::TOK_IGNORE_EMPTY);
+		Poco::StringTokenizer tok(GetSettings().m_channels, ",", Poco::StringTokenizer::TOK_TRIM | Poco::StringTokenizer::TOK_IGNORE_EMPTY);
 		for (size_t i = 0; i < tok.count(); ++i)
 		{
 			Subscribe(instruments, "unsubscribe", tok[i]);

@@ -20,7 +20,7 @@ const std::string ATTR_SECRETKEY = "secret_key";
 const std::string ATTR_RECVWINDOW = "recv_window";
 const std::string ATTR_INSTRUMENTS = "instruments";
 const std::string ATTR_SESSIONS = "sessions";
-const std::string ATTR_CHANNEL = "channel";
+const std::string ATTR_CHANNELS = "channels";
 const std::string ATTR_ORDERS_HTTP = "orders_http";
 const std::string ATTR_EXCHANGE_INFO_HTTP = "exchange_info_http";
 const std::string ATTR_SNAPSHOT_HTTP = "snapshot_http";
@@ -56,7 +56,7 @@ struct Settings
 	// (this is possibly exchange specific (binance))
 	int m_recvWindow { };
 	
-	std::string m_channel;
+	std::string m_channels;
 	std::string m_instruments;
 	unsigned int m_depth { 0 };
 	std::string m_protocol;

@@ -93,7 +93,7 @@ namespace CORE {
 
         //----------------------------------------------------------------------
         void ConnectionMD::Subscribe(const CRYPTO::ConnectionBase::TInstruments &instruments, const std::string &method,
-                                     const std::string &channel) {
+                                     const std::string &channels) {
             std::string prods;
             for (const auto &inst: instruments) {
                 prods += (prods.empty() ? "" : ",") + std::string("\"") + inst + "\"";
@@ -103,13 +103,13 @@ namespace CORE {
 
             if (m_settings.m_apikey.empty() && m_settings.m_secretkey.empty() && m_settings.m_passphrase.empty()) {
                 //use the public feed, no authentication required..
-                payload = "{ \"type\": \"" + method + "\", \"product_ids\": [" + prods + "], \"channel\": \"" +
-                          channel + "\" }";
+                payload = "{ \"type\": \"" + method + "\", \"product_ids\": [" + prods + "], \"channels\": [\"" +
+                          channels + "\"] }";
             } else {
                 // Use direct feed, authentication attributes required..
                 AuthHeader header = GetAuthHeader();
                 payload =
-                        "{ \"type\": \"" + method + "\", \"product_ids\": [" + prods + "], \"channel\":  \"" + channel
+                        "{ \"type\": \"" + method + "\", \"product_ids\": [" + prods + "], \"channel\":  \"" + channels
                         + "\" , \"signature\": \"" + std::get<0>(
                             header) + "\",\"key\":\"" + std::get<1>(header) + "\",\"passphrase\":\"" + std::get<2>(
                             header) + "\",\"timestamp\":\"" + std::get<3>(header) + "\"}";

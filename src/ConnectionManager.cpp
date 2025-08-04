@@ -149,7 +149,7 @@ bool ConnectionManager::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 							settings.m_apikey = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_APIKEY, "");
 							settings.m_secretkey = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_SECRETKEY, "");
 							settings.m_recvWindow = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_RECVWINDOW, CRYPTO::ATTR_RECVWINDOW_DEFAULT);
-							settings.m_channel = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_CHANNEL, "");
+							settings.m_channels = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_CHANNELS, "");
 							
 							auto sessIter = m_sessionsInstruments.find(settings.m_name);
 							if (sessIter == m_sessionsInstruments.cend())
