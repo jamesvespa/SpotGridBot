@@ -13,7 +13,7 @@ namespace CORE {
     namespace COINBASE {
         //----------------------------------------------------------------------
         ConnectionMD::ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath)
-            : ConnectionBase(settings, loggingPropsPath, "CoinbaseConnectionMD") {
+            : ConnectionBase(settings, loggingPropsPath, settings.m_name) {
 
             GetMessageProcessor().Register([](const std::shared_ptr<CRYPTO::JSONDocument> message)
                                             {
@@ -69,7 +69,6 @@ namespace CORE {
 
         //----------------------------------------------------------------------
         UTILS::CurrencyPair ConnectionMD::GetCurrency(const std::shared_ptr<CRYPTO::JSONDocument> msg) const {
-            // Use smart base function which employs hash
             return GetCurrencyPair(TranslateSymbol(msg->GetValue<std::string>("product_id")));
         }
 
