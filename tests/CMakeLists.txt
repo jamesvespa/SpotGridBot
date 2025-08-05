@@ -50,6 +50,7 @@ file(GLOB SOURCES_ADDITIONAL
     ${SpotGridBot_SOURCE_DIR}/src/binance/ConnectionTT.cpp
     ${SpotGridBot_SOURCE_DIR}/src/MessageProcessor.cpp
     ${SpotGridBot_SOURCE_DIR}/src/RestBase.cpp
+    ${SpotGridBot_SOURCE_DIR}/src/ActiveQuoteTable.cpp
     )
 
 file(GLOB LIB_SOURCES ${SpotGridBot_SOURCE_DIR}/lib/utils/src/*.cpp)

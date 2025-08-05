@@ -22,6 +22,7 @@
 #include "MessageProcessor.h"
 #include "Tools.h"
 #include "CryptoCommon.h"
+#include "ActiveQuoteTable.h"
 #include "Logger.h"
 #include "IConnection.h"
 
@@ -190,7 +191,14 @@ private:
 	char m_buffer[MAX_BUFF] { };
 
 	std::unique_ptr<std::thread> m_listenerThread;
-	MessageProcessor m_messageProcessor;
+	
+	CRYPTO::MessageProcessor m_messageProcessor;
+	
+	CORE::ActiveQuoteTable m_activeQuoteTable;
+	
+	// Number of published quotes
+	std::atomic<unsigned long> m_publishedQuotesCounter { 0 };
+	mutable std::atomic<unsigned long> m_publishedQuotesOld { 0 }; // to calculate delta
 };
 }
 }

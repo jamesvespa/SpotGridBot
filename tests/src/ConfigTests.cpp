@@ -31,7 +31,7 @@ namespace MERCURY::TEST {
 		ASSERT_EQ("", settings.m_apikey);
 		ASSERT_EQ("", settings.m_secretkey);
 		ASSERT_EQ(0, settings.m_recvWindow);
-		ASSERT_EQ("", settings.m_channel);
+		ASSERT_EQ("", settings.m_channels);
 		ASSERT_EQ("", settings.m_instruments);
 		ASSERT_EQ(0, settings.m_parameters.size());
 	}

@@ -308,88 +308,87 @@ void ConnectionBase::PublishQuotes(UTILS::NormalizedMDData::Ptr nmd)
 {
 	if (nmd)
 	{
-		// int64_t key { 0 }, refKey { 0 };
-		// ActiveQuoteTable::QuoteInfoPtr replacedQuoteRef;
-		//
-		// SessionConfig* sessionConfig = m_ctx.SessionConfigControllerPtr()->FindById(GetSettings().m_numId);
-		// const size_t cnt { nmd->entries.size() };
-		// uint64_t sequenceTag { std::hash<std::string>()("") };
-		//
-		// for (size_t i { 0 }; i < cnt; ++i)
-		// {
-		// 	NormalizedMDData::Entry &entry { nmd->entries[i] };
-		// 	entry.endOfMessage = (i == cnt - 1);
-		// 	entry.sequenceTag = sequenceTag;
-		// 	CurrencyPair cp = entry.instrument;
-		// 	if ((!entry.entryType.Valid() || !cp.Valid())) //no entry type with UPDATEs and DELETEs -> lookup entry and guess type
-		// 	{
-		// 		if (!entry.refId.empty())
-		// 		{
-		// 			ActiveQuoteTable::QuoteInfo quoteInfo;
-		// 			if (m_activeQuoteTable.FindQuoteInfo(entry.refId, quoteInfo))
-		// 			{
-		// 				if (!cp.Valid())
-		// 				{
-		// 					cp = quoteInfo.cp;
-		// 				}
-		// 				if (!entry.entryType.Valid())
-		// 				{
-		// 					entry.entryType = quoteInfo.entryType;
-		// 				}
-		// 			}
-		// 			else
-		// 			{
-		// 				poco_error_f3(logger(), "Session %ld - ERROR: No quote info found for entry '%s'->'%s' -> QUOTE SKIPPED", GetSettings().m_numId, entry.id,
-		// 							  entry.refId);
-		// 				continue;
-		// 			}
-		// 		}
-		// 		else
-		// 		{
-		// 			poco_error_f3(logger(), "Session %ld - ERROR: No entry type and/or symbol and no ref ID in entry '%s'-> '%s' -> QUOTE SKIPPED",
-		// 						  GetSettings().m_numId, entry.id, entry.refId);
-		// 			continue;
-		// 		}
-		// 	}
-		//
-		// 	key = NewInt64Key();
-		// 	if (entry.updateType == QT_DELETE)
-		// 	{
-		// 		replacedQuoteRef = entry.refId.empty() ? nullptr : m_activeQuoteTable.RemoveQuoteInfo(entry.refId);
-		// 	}
-		// 	else
-		// 	{
-		// 		replacedQuoteRef = m_activeQuoteTable.ReplaceQuoteInfo(entry.refId, entry.id, key, cp, entry.entryType);
-		// 	}
-		// 	if (replacedQuoteRef)
-		// 	{
-		// 		if (entry.updateType == QT_NEW) // NEW refers to existing quote-> UPDATE
-		// 		{
-		// 			entry.updateType = QT_UPDATE;
-		// 		}
-		// 		refKey = replacedQuoteRef->key;
-		// 	}
-		// 	else
-		// 	{
-		// 		if (entry.updateType == QT_DELETE)
-		// 		{
-		// 			poco_error_f3(logger(), "%ld - ERROR: DELETE referring to non-existent entry '%s' --> '%s'", GetSettings().m_numId, entry.id, entry.refId);
-		// 			return;
-		// 		}
-		// 		else if (entry.updateType == QT_UPDATE) // UPDATE -> NEW
-		// 		{
-		// 			entry.updateType = QT_NEW;
-		// 		}
-		// 		refKey = 0;
-		// 	}
-		//
-		// 	PublishQuote(key, refKey, sessionConfig, CurrentTimestamp(), CurrentTimestamp(), cp, entry);
-		// }
+		int64_t key { 0 }, refKey { 0 };
+		ActiveQuoteTable::QuoteInfoPtr replacedQuoteRef;
+
+		//SessionConfig* sessionConfig = m_ctx.SessionConfigControllerPtr()->FindById(GetSettings().m_numId);
+		const size_t cnt { nmd->entries.size() };
+		uint64_t sequenceTag { std::hash<std::string>()("") };
+
+		for (size_t i { 0 }; i < cnt; ++i)
+		{
+			NormalizedMDData::Entry &entry { nmd->entries[i] };
+			entry.endOfMessage = (i == cnt - 1);
+			entry.sequenceTag = sequenceTag;
+			CurrencyPair cp = entry.instrument;
+			if ((!entry.entryType.Valid() || !cp.Valid())) //no entry type with UPDATEs and DELETEs -> lookup entry and guess type
+			{
+				if (!entry.refId.empty())
+				{
+					ActiveQuoteTable::QuoteInfo quoteInfo;
+					if (m_activeQuoteTable.FindQuoteInfo(entry.refId, quoteInfo))
+					{
+						if (!cp.Valid())
+						{
+							cp = quoteInfo.cp;
+						}
+						if (!entry.entryType.Valid())
+						{
+							entry.entryType = quoteInfo.entryType;
+						}
+					}
+					else
+					{
+						poco_error_f3(logger(), "Session %ld - ERROR: No quote info found for entry '%s'->'%s' -> QUOTE SKIPPED", GetSettings().m_numId, entry.id,
+									  entry.refId);
+						continue;
+					}
+				}
+				else
+				{
+					poco_error_f3(logger(), "Session %ld - ERROR: No entry type and/or symbol and no ref ID in entry '%s'-> '%s' -> QUOTE SKIPPED",
+								  GetSettings().m_numId, entry.id, entry.refId);
+					continue;
+				}
+			}
+
+			key = NewInt64Key();
+			if (entry.updateType == QT_DELETE)
+			{
+				replacedQuoteRef = entry.refId.empty() ? nullptr : m_activeQuoteTable.RemoveQuoteInfo(entry.refId);
+			}
+			else
+			{
+				replacedQuoteRef = m_activeQuoteTable.ReplaceQuoteInfo(entry.refId, entry.id, key, cp, entry.entryType);
+			}
+			if (replacedQuoteRef)
+			{
+				if (entry.updateType == QT_NEW) // NEW refers to existing quote-> UPDATE
+				{
+					entry.updateType = QT_UPDATE;
+				}
+				refKey = replacedQuoteRef->key;
+			}
+			else
+			{
+				if (entry.updateType == QT_DELETE)
+				{
+					poco_error_f3(logger(), "%ld - ERROR: DELETE referring to non-existent entry '%s' --> '%s'", GetSettings().m_numId, entry.id, entry.refId);
+					return;
+				}
+				else if (entry.updateType == QT_UPDATE) // UPDATE -> NEW
+				{
+					entry.updateType = QT_NEW;
+				}
+				refKey = 0;
+			}
+
+			PublishQuote(key, refKey, CurrentTimestamp(), CurrentTimestamp(), cp, entry);
+		}
 	}
 	else
 	{
 		poco_error(logger(), "Connection::PublishQuotes: Normalized Market Data Ptr null");
-		return;
 	}
 }
 
