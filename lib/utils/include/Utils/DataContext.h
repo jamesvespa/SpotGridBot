@@ -9,7 +9,7 @@
 #define MERCURYUTILS_DATACONTEXT_H
 
 //Stub class to be used to seed an empty context parameter (second sortbook template arghument)..
-namespace SORTBOOK
+namespace ORDERBOOK
 {
     class DataContext
     {

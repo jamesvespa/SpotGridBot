@@ -311,7 +311,6 @@ void ConnectionBase::PublishQuotes(UTILS::NormalizedMDData::Ptr nmd)
 		int64_t key { 0 }, refKey { 0 };
 		ActiveQuoteTable::QuoteInfoPtr replacedQuoteRef;
 
-		//SessionConfig* sessionConfig = m_ctx.SessionConfigControllerPtr()->FindById(GetSettings().m_numId);
 		const size_t cnt { nmd->entries.size() };
 		uint64_t sequenceTag { std::hash<std::string>()("") };
 
