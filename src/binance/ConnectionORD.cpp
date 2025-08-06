@@ -6,6 +6,10 @@
 #include "Poco/URI.h"
 #include "binance/ConnectionORD.h"
 
+namespace CORE {
+	class ConnectionManager;
+}
+
 using namespace UTILS;
 
 using namespace CORE::CRYPTO;
@@ -17,8 +21,8 @@ namespace BINANCE {
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------------------------
-ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath)
-		: RESTAPI::RestConnectionBase(settings, loggingPropsPath, "BinanceConnectionTT")
+ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager)
+		: RESTAPI::RestConnectionBase(settings, loggingPropsPath, settings.m_name)
 {
 	GetMessageProcessor().Register([] (std::shared_ptr<CRYPTO::JSONDocument> jd)
 								   {

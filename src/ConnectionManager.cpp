@@ -29,8 +29,8 @@ using namespace UTILS;
 
 namespace CORE {
 
-ConnectionManager::ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath)
-	: Logging("ConnectionManager"), ErrorHandler(pLogger()), m_configPath(configPath), m_loggingPropsPath(loggingPropsPath){
+ConnectionManager::ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, BOOK::OrderBook& orderBook)
+	: Logging("ConnectionManager"), ErrorHandler(pLogger()), m_configPath(configPath), m_loggingPropsPath(loggingPropsPath), m_orderBook(orderBook) {
 
 	// Register supported connection types
 	RegisterConnectionCreator<BINANCE::ConnectionMD>(BINANCE::SCHEMAMD);
@@ -64,7 +64,7 @@ void ConnectionManager::Connect()
 	for ( auto iter=m_connections.begin(); iter!=m_connections.end(); ++iter) {
 		auto conn = *iter;
 		conn.second->Connect();
-		};
+	};
 }
 
 void ConnectionManager::Disconnect()

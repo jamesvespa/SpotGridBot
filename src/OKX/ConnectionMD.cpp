@@ -7,8 +7,8 @@ namespace CORE {
 namespace OKX {
 
 //------------------------------------------------------------------------------
-ConnectionMD::ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath)
-		: CORE::CRYPTO::ConnectionBase(settings, loggingPropsPath, "OKXConnectionTR")
+ConnectionMD::ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager)
+		: CORE::CRYPTO::ConnectionBase(settings, loggingPropsPath, settings.m_name, connectionManager)
 {
 	GetMessageProcessor().Register([](const std::shared_ptr<CRYPTO::JSONDocument> jd)
 								   {

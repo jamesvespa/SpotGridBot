@@ -1,6 +1,7 @@
 #include "ConnectionBase.h"
 
 
+#include "ConnectionManager.h"
 #include "Utils/Result.h"
 
 #include "Poco/URI.h"
@@ -18,8 +19,8 @@ std::string GenerateStandardEntryId(const UTILS::CurrencyPair &cp, UTILS::QuoteT
 
 namespace CORE {
 namespace CRYPTO {
-ConnectionBase::ConnectionBase(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const std::string &loggerName)
-		: Logging(loggerName), m_settings(settings), m_logger(settings, loggingPropsPath)
+ConnectionBase::ConnectionBase(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const std::string &loggerName, const ConnectionManager& connectionManager)
+		: Logging(loggerName), m_settings(settings), m_logger(settings, loggingPropsPath), m_connectionManager(connectionManager)
 {
 	// Make sure all instruments are in upper case
 	m_settings.m_instruments = UTILS::toupper(m_settings.m_instruments);
@@ -190,10 +191,8 @@ bool ConnectionBase::Send(const std::string &payload)
 UTILS::BoolResult ConnectionBase::PublishQuote(int64_t key, int64_t refKey, int64_t timestamp,
 															 int64_t receiveTime, UTILS::CurrencyPair cp, const UTILS::NormalizedMDData::Entry &entry)
 {
-	std::stringstream topic;
-	topic << "q/" << cp.BaseCCY().ToString() << cp.QuoteCCY().ToString() << "/" << (entry.entryType.Bid() ? 'b' : 'a') << "/" ;
+	m_connectionManager.GetOrderBook().AddEntry(key, refKey, timestamp, receiveTime, cp, entry);
 
-	//return m_ctx.AdapterServerPtr()->Publish(key, refKey, session, timestamp, receiveTime, cp, entry);
 	return true;
 }
 

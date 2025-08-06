@@ -4,6 +4,10 @@
 #include "OKX/Definitions.h"
 
 namespace CORE {
+	class ConnectionManager;
+}
+
+namespace CORE {
 namespace OKX {
 
 std::string Sign(const std::string &timeStampStr, const std::string &requestType, const std::string &requestPath, const std::string &requestBody,
@@ -15,7 +19,7 @@ std::string Sign(const std::string &timeStampStr, const std::string &requestType
 class ConnectionORD : public CORE::RESTAPI::RestConnectionBase
 {
 public:
-	ConnectionORD(const CRYPTO::Settings &settings, const std::string& loggingPropsPath);
+	ConnectionORD(const CRYPTO::Settings &settings, const std::string& loggingPropsPath, const ConnectionManager& connectionManager);
 	
 	std::string SendOrder(const UTILS::CurrencyPair &instrument, const UTILS::Side side, const RESTAPI::EOrderType orderType,
 						  const UTILS::TimeInForce timeInForce, const double price, const double quantity,

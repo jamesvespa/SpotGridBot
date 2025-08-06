@@ -27,6 +27,7 @@ target_link_libraries(SpotGridBot PUBLIC
                         protobuf
                         crypto
                         ${Utils_BINARY_DIR}/libUtils.so
+                        ${OrderBook_BINARY_DIR}/libOrderBook.so
                         )
 
 install(TARGETS SpotGridBot DESTINATION bin)

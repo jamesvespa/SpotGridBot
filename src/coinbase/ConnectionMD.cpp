@@ -12,8 +12,8 @@ using namespace UTILS;
 namespace CORE {
     namespace COINBASE {
         //----------------------------------------------------------------------
-        ConnectionMD::ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath)
-            : ConnectionBase(settings, loggingPropsPath, settings.m_name) {
+        ConnectionMD::ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager)
+            : ConnectionBase(settings, loggingPropsPath, settings.m_name, connectionManager) {
 
             GetMessageProcessor().Register([](const std::shared_ptr<CRYPTO::JSONDocument> message)
                                             {

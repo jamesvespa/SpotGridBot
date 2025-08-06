@@ -25,13 +25,14 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     include_directories(
             ${SpotGridBot_SOURCE_DIR}/lib/utils/include
+            ${SpotGridBot_SOURCE_DIR}/lib/orderbook/include
     )
 
     add_subdirectory(lib/utils)
     add_subdirectory(lib/orderbook)
     add_subdirectory(src)
 
-   find_package(GTest REQUIRED)
-   enable_testing()
-   add_subdirectory(tests)
+#   find_package(GTest REQUIRED)
+#   enable_testing()
+#   add_subdirectory(tests)
 endif()

@@ -34,8 +34,8 @@ std::string ToString(const UTILS::CurrencyPair &instrument)
 }
 
 //------------------------------------------------------------------------------
-ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string& loggingPropsPath)
-		: RESTAPI::RestConnectionBase(settings, loggingPropsPath, "OKXConnection")
+ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string& loggingPropsPath, const ConnectionManager& connectionManager)
+		: RESTAPI::RestConnectionBase(settings, loggingPropsPath, settings.m_name)
 {
 	GetMessageProcessor().Register([](const std::shared_ptr<CRYPTO::JSONDocument> jd)
 								   {

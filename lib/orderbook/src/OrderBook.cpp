@@ -131,7 +131,6 @@ void OrderBook::AddQuote(CurrencyPair cp, bool bid, Quote::Ptr quote)
 			if (vec->empty()) // vector empty, create and no need to sort
 			{
 				vec->push_back(quote);
-				SetLastCleanupTime(cp, bid, CurrentTimestamp());
 			}
 			else // vector NOT empty, update and sort or insert at correct position
 			{

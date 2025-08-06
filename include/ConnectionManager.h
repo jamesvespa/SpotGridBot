@@ -1,21 +1,21 @@
 #pragma once
 
 #include <iomanip>
-#include <vector>
 #include <unordered_map>
 #include <map>
 #include <memory>
 
 #include "Utils/Logging.h"
 #include "ConnectionBase.h"
-
+#include "OrderBook/OrderBook.h"
+#include "Utils/ErrorHandler.h"
 
 namespace CORE {
 
 class ConnectionManager final : UTILS::Logging, public UTILS::ErrorHandler
 {
 public:
-	ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath);
+	ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, BOOK::OrderBook& orderBook);
 
 	~ConnectionManager() {
 		Disconnect();
@@ -47,7 +47,11 @@ public:
 	{
 		return m_settingsCollection;
 	}
-	
+
+	BOOK::OrderBook& GetOrderBook() const {
+		return m_orderBook;
+	}
+
 	// Load sessions settings..
 	bool LoadConfig();
 	bool LoadConfig(const UTILS::XmlDocPtr &pDoc);
@@ -59,15 +63,11 @@ protected:
 	{
 		m_connectionsFactory.emplace(schema, [this](const CRYPTO::Settings &setting)
 									{
-										return std::make_shared<TConnection>(setting, m_loggingPropsPath);
+										return std::make_shared<TConnection>(setting, m_loggingPropsPath, *this);
 									});
 	}
 
 private:
-	
-	std::string GetServiceName();
-	
-	void ClearActiveSessionConfig();
 	
 	 TSettingsCollection m_settingsCollection;
 	
@@ -79,6 +79,7 @@ private:
 	TSessionsInstruments m_sessionsInstruments;
 
 	std::map<std::string, std::shared_ptr<CRYPTO::IConnection>> m_connections;
+	BOOK::OrderBook &m_orderBook;
 }; // ConnectionManager
 
 } // namespace CORE

@@ -11,7 +11,6 @@
 #include "Utils/CurrencyPair.h"
 
 #include "Quote.h"
-#include "Filter.h"
 
 namespace CORE {
 namespace BOOK {
@@ -137,27 +136,7 @@ public:
 	std::string TypeString() const { return Bid() ? "bid" : "ask"; }
 	
 	bool Matches(UTILS::CurrencyPair instrument, UTILS::Side side) const;
-	
-	virtual const Filter *GetFilter() const { return nullptr; }
-	
-	/** Execute an action for all filters
-	 *
-	 * @tparam A Function type; signature: (const Filter &) -> void
-	 * @param action Action to be executed for each filter
-	 */
-	template <typename A>
-	void ForEachFilter(A action)
-	{
-		if (SourceViewPtr())
-		{
-			SourceViewPtr()->ForEachFilter(action);
-		}
-		const Filter *filter { GetFilter() };
-		if (filter)
-		{
-			action(*filter);
-		}
-	}
+
 
 private:
 	/*! \brief Name of the view */

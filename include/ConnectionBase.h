@@ -27,6 +27,10 @@
 #include "IConnection.h"
 
 namespace CORE {
+	class ConnectionManager;
+}
+
+namespace CORE {
 
 namespace CRYPTO {
 const size_t MAX_BUFF = 2000000;
@@ -40,7 +44,7 @@ const int MAX_NUMBER_OF_EXCEPTIONS_IN_CONNECTION_THREAD = 100;
 class ConnectionBase : public CRYPTO::IConnection, public UTILS::Logging, public UTILS::ErrorHandler
 {
 public:
-	ConnectionBase(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const std::string &loggerName);
+	ConnectionBase(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const std::string &loggerName, const ConnectionManager& connectionManager);
 	
 	virtual ~ConnectionBase();
 	
@@ -199,6 +203,7 @@ private:
 	// Number of published quotes
 	std::atomic<unsigned long> m_publishedQuotesCounter { 0 };
 	mutable std::atomic<unsigned long> m_publishedQuotesOld { 0 }; // to calculate delta
+	const ConnectionManager& m_connectionManager;
 };
 }
 }

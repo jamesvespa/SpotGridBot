@@ -29,8 +29,10 @@ int main(int argc, char** argv)
 
         CurrencyPair::InitializeCurrencyConfigs();
 
+        BOOK::OrderBook m_orderBook;
+
         Options options(argc, argv);
-        ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath());
+        ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
         connectionManager.Connect();
 
        	poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");

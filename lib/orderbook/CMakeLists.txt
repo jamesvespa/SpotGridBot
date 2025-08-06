@@ -4,11 +4,9 @@ project(OrderBook
         )
 
 set(SOURCE_FILES
-        ${OrderBook_SOURCE_DIR}/src/BookView.cpp
-        ${OrderBook_SOURCE_DIR}/src/Filter.cpp
-        ${OrderBook_SOURCE_DIR}/src/FilterView.cpp
         ${OrderBook_SOURCE_DIR}/src/Quote.cpp
         ${OrderBook_SOURCE_DIR}/src/OrderBook.cpp
+        ${OrderBook_SOURCE_DIR}/src/BookView.cpp
 )
 
 add_library(OrderBook SHARED ${SOURCE_FILES})

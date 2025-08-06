@@ -18,7 +18,7 @@ const std::string MSGTYPE_DepthNUpdate = "depthNUpdate"; // the top 'n' depth
 class ConnectionMD : public CORE::CRYPTO::ConnectionBase
 {
 public:
-	ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath);
+	ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager);
 
 	std::string TranslateSymbolToExchangeSpecific(const std::string &symbol) const override
 	{

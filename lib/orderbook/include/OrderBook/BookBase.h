@@ -33,7 +33,15 @@ protected:
 	
 	void connect() { }
 	
-	std::string propDefaultValue(const std::string &name) const;
+	std::string propDefaultValue(const std::string &name) const
+	{
+		if (name == "batchsize")
+		{
+			return "1";
+		}
+
+		return "0";
+	}
 
 };
 

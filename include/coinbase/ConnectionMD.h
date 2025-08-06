@@ -19,7 +19,7 @@ typedef const std::tuple<std::string, std::string, std::string, std::string> Aut
 class ConnectionMD : public CORE::CRYPTO::ConnectionBase
 {
 public:
-	ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath);
+	ConnectionMD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager);
 
 	UTILS::CurrencyPair GetCurrency(const std::shared_ptr<CRYPTO::JSONDocument> msg) const;
 

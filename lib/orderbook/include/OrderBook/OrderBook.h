@@ -10,9 +10,7 @@
 
 #include "OrderBook/Quote.h"
 #include "OrderBook/BookBase.h"
-#include "OrderBook/Filter.h"
 #include "OrderBook/BookView.h"
-#include "OrderBook/FilterView.h"
 
 #define ATTR_BATCHSIZE            "batchsize"
 #define DFLT_BATCHSIZE            1
@@ -39,7 +37,7 @@ public:
 	/** @brief Type alias for unique pointer to vector of shared pointers to single quotes. */
 	using QuoteVecPtr = std::shared_ptr<QuoteVec>;
 	using QuoteVecPtrToConst = std::shared_ptr<const QuoteVec>;
-	
+
 	/** @brief Constructor. */
 	explicit OrderBook()
 			: BookBase("SortBook") { }
@@ -79,7 +77,7 @@ public:
 	 * @return Vector of quote groups
 	 */
 	BookView::QuoteGroupVec GetLevels(UTILS::CurrencyPair cp, bool bid, unsigned int n, const BookView::QuotePred &quotePred = nullptr) const;
-	
+
 	/** @brief Dynamically creates quote groups and passes them to the provided
 	 * callback action.
 	 *
@@ -93,7 +91,7 @@ public:
 	 */
 	void IterateQuoteGroups(UTILS::CurrencyPair cp, bool bid, const BookView::QuoteGroupFunc &action,
 							const BookView::QuotePred &quotePred = nullptr) const;
-	
+
 	/**
 	 * Executes an action for each quote of a ccy pair and side.
 	 * @tparam A Template type for action to be executed
@@ -255,7 +253,7 @@ private:
 	Quote::Ptr m_lastQuote;
 	
 	void AddQuote(UTILS::CurrencyPair cp, bool bid, Quote::Ptr quote);
-	
+
 	OrderBook::QuoteVec::const_iterator getNextLevel(QuoteGroup::Ptr &quoteGroup, const QuoteVec &srcVec, const BookView::QuotePred &quotePred,
 													QuoteVec::const_iterator iterator) const;
 	
@@ -271,14 +269,6 @@ private:
 	std::shared_mutex &GetLock(UTILS::CurrencyPair cp, bool bid) const;
 	
 	void CleanupQuoteVec(UTILS::CurrencyPair cp, QuoteVec &vec, int64_t maxAge);
-	
-	/** @brief Sets a timestamp of last cleanup for a ccy pair and side  
-	 * 
-	 * @param cp Currency pair
-	 * @param bid Side (@a true -> bid, @a false -> ask)
-	 * @param ts Timestamp in nanoseconds
-	 */
-	void SetLastCleanupTime(UTILS::CurrencyPair cp, bool bid, int64_t ts);
 	
 	std::optional<int64_t> GetLastCleanupTime(UTILS::CurrencyPair cp, bool bid) const;
 };
