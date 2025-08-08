@@ -30,6 +30,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     add_subdirectory(lib/utils)
     add_subdirectory(lib/orderbook)
+    add_subdirectory(lib/gridbot)
     add_subdirectory(src)
 
 #   find_package(GTest REQUIRED)

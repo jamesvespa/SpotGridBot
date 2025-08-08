@@ -1,0 +1,15 @@
+{
+  "pair": "BTC/USDT",
+  "gridBasePrice": 30000.0,
+  "levelsBelow": 4,
+  "levelsAbove": 4,
+  "stepPercent": 0.005,
+  "perOrderQty": 0.001,
+  "maxPositionBtc": 2.0,
+  "feeRate": 0.001,
+  "partialFillMinPct": 0.3,
+  "partialFillMaxPct": 1.0,
+  "slippageMaxPct": 0.002,
+  "tickDelayMs": 2000,
+  "simulateTicks": 2000
+}

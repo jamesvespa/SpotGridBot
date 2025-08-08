@@ -15,6 +15,8 @@ add_executable(SpotGridBot ${SOURCE_LIST})
 target_include_directories(SpotGridBot PRIVATE
         "${SpotGridBot_SOURCE_DIR}/include"
         "${SpotGridBot_SOURCE_DIR}/lib/util/include"
+        "${SpotGridBot_SOURCE_DIR}/lib/orderbook/include"
+        "${SpotGridBot_SOURCE_DIR}/lib/gridbot/include"
         )
 
 target_link_libraries(SpotGridBot PUBLIC
@@ -28,6 +30,7 @@ target_link_libraries(SpotGridBot PUBLIC
                         crypto
                         ${Utils_BINARY_DIR}/libUtils.so
                         ${OrderBook_BINARY_DIR}/libOrderBook.so
+                        ${GridBot_BINARY_DIR}/libGridBot.so
                         )
 
 install(TARGETS SpotGridBot DESTINATION bin)

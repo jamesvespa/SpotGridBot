@@ -1,0 +1,14 @@
+project(GridBot
+        LANGUAGES CXX C
+        DESCRIPTION "GridBot Lib used by SpotGridBot"
+        )
+
+set(SOURCE_FILES
+        ${GridBot_SOURCE_DIR}/src/gridstrategy.cpp
+)
+
+add_library(GridBot SHARED ${SOURCE_FILES})
+
+target_include_directories(GridBot PUBLIC ${GridBot_SOURCE_DIR}/include)
+
+#add_subdirectory(tests)

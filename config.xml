@@ -61,7 +61,7 @@
                      api_key=""
                      secret_key=""
                      port="443"
-                     channels="level2_batch"
+                     channels="level2_batch,heartbeat"
                      username=""
                      password=""
                      schema="Coinbase:MD"

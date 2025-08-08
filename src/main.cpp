@@ -12,8 +12,12 @@
 #include "Poco/Util/Application.h"
 #include "Poco/URI.h"
 
+#include "exchange.h"
+#include "gridstrategy.h"
+
 using namespace CORE;
 using namespace UTILS;
+using namespace std;
 
 //------------------------------------------------------------------------------
 int main(int argc, char** argv)
@@ -30,6 +34,26 @@ int main(int argc, char** argv)
         CurrencyPair::InitializeCurrencyConfigs();
 
         BOOK::OrderBook m_orderBook;
+
+        string configPath = "config.json";
+        if (argc > 1) configPath = argv[1];
+        auto cfg = loadConfig(configPath);
+
+        auto ex = make_shared<MockExchange>(cfg.gridBasePrice, cfg.feeRate,
+                                           cfg.partialFillMinPct, cfg.partialFillMaxPct, cfg.slippageMaxPct);
+        ex->setBalances(10000.0, 0.1);
+
+        GridConfig gcfg;
+        gcfg.pair = cfg.pair;
+        gcfg.gridBasePrice = cfg.gridBasePrice;
+        gcfg.levelsAbove = cfg.levelsAbove;
+        gcfg.levelsBelow = cfg.levelsBelow;
+        gcfg.stepPercent = cfg.stepPercent;
+        gcfg.perOrderQty = cfg.perOrderQty;
+        gcfg.maxPositionBtc = cfg.maxPositionBtc;
+
+        STRATEGY::GridStrategy strat(ex, gcfg);
+        strat.start();
 
         Options options(argc, argv);
         ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
