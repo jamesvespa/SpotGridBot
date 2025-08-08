@@ -1,9 +1,4 @@
-/**
-* @file BgwMonitor.cpp
-* @author Helmut <james.doll@bbf-it.at>
-* @date 12/1/21
-* @version * @copyright (c) 2021 BBF-IT
-*/
+
 
 #include "Utils/Utils.h"
 

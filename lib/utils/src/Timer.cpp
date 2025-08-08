@@ -1,9 +1,4 @@
-/**
-* @file
-* @author Helmut <james.doll@bbf-it.at>
-* @date 4/3/20
-* @version * @copyright (c) 2020 BBF-IT
-*/
+
 
 #include <random>
 

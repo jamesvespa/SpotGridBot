@@ -1,11 +1,4 @@
-/**
- * @file
- * @author      Alex R <jamesander.razancev@bbf-it.at>
- * @brief       Latency class
- * @date        2022.01.27
- * @version     2022.01.31
- * @copyright   (c) 2022 BBF-IT
-*/
+
 
 #include "Utils/Latency.h"
 #include <Poco/DOM/Node.h>

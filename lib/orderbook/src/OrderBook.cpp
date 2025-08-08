@@ -151,6 +151,15 @@ void OrderBook::AddQuote(CurrencyPair cp, bool bid, Quote::Ptr quote)
 	}
 
 	std::atomic_store(&m_lastQuote, quote);
+
+	// static int cnt=1;
+	//
+	// if (cnt++ == 30)
+	// {
+	// 	printBooks(std::cout, true, 10);
+	// 	printBooks(std::cout, false, 10);
+	// 	cnt = 1;
+	// }
 }
 
 BookView::QuoteGroupVec OrderBook::GetLevels(CurrencyPair cp, bool bid, unsigned int n, const BookView::QuotePred &quotePred) const

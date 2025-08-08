@@ -1,9 +1,4 @@
-/**
-* @file BgwMonitor.h
-* @author Helmut <james.doll@bbf-it.at>
-* @date 12/1/21
-* @version * @copyright (c) 2021 BBF-IT
-*/
+
 
 #ifndef MERCURYUTILS_BGWMONITOR_H
 #define MERCURYUTILS_BGWMONITOR_H
