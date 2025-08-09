@@ -37,28 +37,27 @@ int main(int argc, char** argv)
 
         string configPath = "config.json";
         if (argc > 1) configPath = argv[1];
-        auto cfg = loadConfig(configPath);
+
+        auto cfg = std::make_unique<CRYPTO::JSONDocument>(loadConfig(configPath));
 
         Options options(argc, argv);
         ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
         connectionManager.Connect();
 
-        auto ex = make_shared<MockExchange>(cfg.gridBasePrice, cfg.feeRate,
-                                   cfg.partialFillMinPct, cfg.partialFillMaxPct, cfg.slippageMaxPct);
-
+        auto ex = make_shared<MockExchange>(0, 0.001, 0.001, 0.01, 1.0);
         ex->setBalances(10000.0, 0.1);
 
         sleep(2); //need to implement
 
         GridConfig gcfg;
-        gcfg.pair = "ETH/BTC";
+        gcfg.pair = cfg->GetValue<std::string>("pair");
         auto cp = UTILS::CurrencyPair(gcfg.pair);
         gcfg.gridBasePrice = cp.CpipToDbl(m_orderBook.GetMidPrice(cp));
-        gcfg.levelsAbove = 21;
-        gcfg.levelsBelow = 21;
-        gcfg.stepPercent = 0.6606;
-        gcfg.perOrderQty = 0.00904;
-        gcfg.maxPositionBtc = cfg.maxPositionBtc;
+        gcfg.levelsAbove = cfg->GetValue<int>("levelsAbove");
+        gcfg.levelsBelow = cfg->GetValue<int>("levelsBelow");
+        gcfg.stepPercent = cfg->GetValue<double>("stepPercent");
+        gcfg.perOrderQty = cfg->GetValue<double>("perOrderQty");
+        gcfg.maxPositionBtc = cfg->GetValue<int>("maxPositionBtc");
 
         STRATEGY::GridStrategy strat(ex, gcfg);
         strat.start();

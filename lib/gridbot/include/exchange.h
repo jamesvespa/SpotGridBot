@@ -25,53 +25,15 @@ struct SimpleConfig {
   int simulateTicks = 200;
 };
 
-static std::string trim(const std::string& s) {
-  size_t a = s.find_first_not_of(" \t\n\r");
-  if (a==std::string::npos) return "";
-  size_t b = s.find_last_not_of(" \t\n\r");
-  return s.substr(a, b-a+1);
-}
-
-static double extract_double(const std::string &content, const std::string &key, double fallback){
-  auto p = content.find("""+key+""");
-  if (p==std::string::npos) return fallback;
-  auto colon = content.find(':', p);
-  if (colon==std::string::npos) return fallback;
-  auto line = content.substr(colon+1, 40);
-  std::string num;
-  for (char c: line) {
-    if ((c>='0' && c<='9') || c=='.' || c=='-' ) num.push_back(c);
-    else if (!num.empty()) break;
-  }
-  try { return stod(num); } catch(...) { return fallback; }
-}
-
-static int extract_int(const std::string &content, const std::string &key, int fallback){
-  return (int)extract_double(content, key, fallback);
-}
-
-static SimpleConfig loadConfig(const std::string &path) {
-  SimpleConfig cfg;
+static std::string loadConfig(const std::string &path) {
   std::ifstream f(path);
   if (!f.is_open()) {
     std::cerr << "[WARN] Cannot open config.json -- using defaults\n";
-    return cfg;
+    return std::string();
   }
   std::string content((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-  cfg.pair = "BTC/USDT";
-  cfg.gridBasePrice = extract_double(content, "gridBasePrice", cfg.gridBasePrice);
-  cfg.levelsBelow = extract_int(content, "levelsBelow", cfg.levelsBelow);
-  cfg.levelsAbove = extract_int(content, "levelsAbove", cfg.levelsAbove);
-  cfg.stepPercent = extract_double(content, "stepPercent", cfg.stepPercent);
-  cfg.perOrderQty = extract_double(content, "perOrderQty", cfg.perOrderQty);
-  cfg.maxPositionBtc = extract_double(content, "maxPositionBtc", cfg.maxPositionBtc);
-  cfg.feeRate = extract_double(content, "feeRate", cfg.feeRate);
-  cfg.partialFillMinPct = extract_double(content, "partialFillMinPct", cfg.partialFillMinPct);
-  cfg.partialFillMaxPct = extract_double(content, "partialFillMaxPct", cfg.partialFillMaxPct);
-  cfg.slippageMaxPct = extract_double(content, "slippageMaxPct", cfg.slippageMaxPct);
-  cfg.tickDelayMs = extract_int(content, "tickDelayMs", cfg.tickDelayMs);
-  cfg.simulateTicks = extract_int(content, "simulateTicks", cfg.simulateTicks);
-  return cfg;
+
+  return content;
 }
 
 // ---------- Utilities ----------
