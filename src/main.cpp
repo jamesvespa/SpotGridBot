@@ -39,8 +39,13 @@ int main(int argc, char** argv)
         if (argc > 1) configPath = argv[1];
         auto cfg = loadConfig(configPath);
 
+        Options options(argc, argv);
+        ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
+        connectionManager.Connect();
+
         auto ex = make_shared<MockExchange>(cfg.gridBasePrice, cfg.feeRate,
-                                           cfg.partialFillMinPct, cfg.partialFillMaxPct, cfg.slippageMaxPct);
+                                   cfg.partialFillMinPct, cfg.partialFillMaxPct, cfg.slippageMaxPct);
+
         ex->setBalances(10000.0, 0.1);
 
         GridConfig gcfg;
@@ -54,10 +59,6 @@ int main(int argc, char** argv)
 
         STRATEGY::GridStrategy strat(ex, gcfg);
         strat.start();
-
-        Options options(argc, argv);
-        ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
-        connectionManager.Connect();
 
        	poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");
         std::cin.get();
