@@ -136,27 +136,27 @@ public:
 	 * @return Pair (bid/ask) of prices of the best accepted quotes from the sortbook
 	 */
 	template <typename P>
-	UTILS::BidAskPair<int64_t> GetBestPrices(UTILS::CurrencyPair cp, P acceptPredicate, bool allowSkewSafePrices = false) const
+	UTILS::BidAskPair<int64_t> GetBestPrices(UTILS::CurrencyPair cp, P acceptPredicate) const
 	{
-		const auto bestQuotes { GetBestQuotes(cp, std::move(acceptPredicate), allowSkewSafePrices) };
+		const auto bestQuotes { GetBestQuotes(cp, std::move(acceptPredicate)) };
 		return { bestQuotes.Bid() ? bestQuotes.Bid()->Price() : 0, bestQuotes.Ask() ? bestQuotes.Ask()->Price() : 0 };
 	}
 	
-	UTILS::BidAskPair<int64_t> GetBestPrices(UTILS::CurrencyPair cp, bool allowSkewSafePrices = false) const;
+	UTILS::BidAskPair<int64_t> GetBestPrices(UTILS::CurrencyPair cp) const;
 	
-	int64_t GetBestPrice(UTILS::CurrencyPair cp, bool bid, bool allowSkewSafePrices = false) const;
+	int64_t GetBestPrice(UTILS::CurrencyPair cp, bool bid) const;
 	
 	template <typename P>
-	int64_t GetBestPrice(UTILS::CurrencyPair cp, bool bid, P acceptPredicate, bool allowSkewSafePrices = false) const
+	int64_t GetBestPrice(UTILS::CurrencyPair cp, bool bid, P acceptPredicate) const
 	{
-		Quote::Ptr quote { GetBestQuote(cp, bid, std::move(acceptPredicate), allowSkewSafePrices) };
+		Quote::Ptr quote { GetBestQuote(cp, bid, std::move(acceptPredicate)) };
 		return quote ? quote->Price() : 0;
 	}
 
-	Quote::Ptr GetBestQuote(UTILS::CurrencyPair cp, bool bid, bool allowSkewSafePrices = false) const;
+	Quote::Ptr GetBestQuote(UTILS::CurrencyPair cp, bool bid) const;
 	
 	template <typename P>
-	Quote::Ptr GetBestQuote(UTILS::CurrencyPair cp, bool bid, P acceptPredicate, bool allowSkewSafePrices = false) const
+	Quote::Ptr GetBestQuote(UTILS::CurrencyPair cp, bool bid, P acceptPredicate) const
 	{
 		Quote::Ptr result { nullptr };
 		std::shared_lock lockMap { m_quoteVectorMap.Mutex() };
@@ -181,17 +181,17 @@ public:
 		return result;
 	}
 
-	int64_t GetMidPrice(UTILS::CurrencyPair cp, bool allowSkewSafePrices = false) const;
+	int64_t GetMidPrice(UTILS::CurrencyPair cp) const;
 	
 	template <typename P>
-	int64_t GetMidPrice(UTILS::CurrencyPair cp, P acceptPredicate, bool allowSkewSafePrices = false) const
+	int64_t GetMidPrice(UTILS::CurrencyPair cp, P acceptPredicate) const
 	{
-		const UTILS::BidAskPair<int64_t> bestPrices { GetBestPrices(cp, std::move(acceptPredicate), allowSkewSafePrices) };
+		const UTILS::BidAskPair<int64_t> bestPrices { GetBestPrices(cp, std::move(acceptPredicate)) };
 		return bestPrices.Bid() > 0 && bestPrices.Ask() > 0 ? (bestPrices.Bid() + bestPrices.Ask()) / 2 : 0;
 	}
 	
 	template <typename P>
-	UTILS::BidAskPair<Quote::Ptr> GetBestQuotes(UTILS::CurrencyPair cp, P acceptPredicate, bool allowSkewSafePrices = false) const
+	UTILS::BidAskPair<Quote::Ptr> GetBestQuotes(UTILS::CurrencyPair cp, P acceptPredicate) const
 	{
 		UTILS::BidAskPair<Quote::Ptr> result { nullptr, nullptr };
 		std::shared_lock lockMap { m_quoteVectorMap.Mutex() };
@@ -206,7 +206,7 @@ public:
 				{
 					for (const auto &q: *quotes)
 					{
-						if (q->Price() > 0 && (allowSkewSafePrices) && acceptPredicate(bid, *q))
+						if (q->Price() > 0 && acceptPredicate(bid, *q))
 						{
 							result.Get(bid) = q;
 							break;
@@ -218,7 +218,7 @@ public:
 		return result;
 	}
 	
-	UTILS::BidAskPair<Quote::Ptr> GetBestQuotes(UTILS::CurrencyPair cp, bool allowSkewSafePrices = false) const;
+	UTILS::BidAskPair<Quote::Ptr> GetBestQuotes(UTILS::CurrencyPair cp) const;
 	
 	void AddEntry(int64_t key, int64_t refKey,
 				  int64_t receiveTime, UTILS::CurrencyPair cp, const UTILS::NormalizedMDData::Entry &entry);

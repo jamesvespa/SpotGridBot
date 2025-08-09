@@ -1,10 +1,10 @@
 
+#include <Poco/Logger.h>
+
 #include "Utils/ContextBase.h"
 #include "Utils/AppHandler.h"
 
 #include "Options.h"
-
-#include <Poco/Logger.h>
 
 #include "ConnectionManager.h"
 #include "Poco/Net/HTTPStreamFactory.h"
@@ -48,13 +48,16 @@ int main(int argc, char** argv)
 
         ex->setBalances(10000.0, 0.1);
 
+        sleep(2); //need to implement
+
         GridConfig gcfg;
-        gcfg.pair = cfg.pair;
-        gcfg.gridBasePrice = cfg.gridBasePrice;
-        gcfg.levelsAbove = cfg.levelsAbove;
-        gcfg.levelsBelow = cfg.levelsBelow;
-        gcfg.stepPercent = cfg.stepPercent;
-        gcfg.perOrderQty = cfg.perOrderQty;
+        gcfg.pair = "ETH/BTC";
+        auto cp = UTILS::CurrencyPair(gcfg.pair);
+        gcfg.gridBasePrice = cp.CpipToDbl(m_orderBook.GetMidPrice(cp));
+        gcfg.levelsAbove = 21;
+        gcfg.levelsBelow = 21;
+        gcfg.stepPercent = 0.6606;
+        gcfg.perOrderQty = 0.00904;
         gcfg.maxPositionBtc = cfg.maxPositionBtc;
 
         STRATEGY::GridStrategy strat(ex, gcfg);

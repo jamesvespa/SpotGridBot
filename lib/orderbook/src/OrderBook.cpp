@@ -209,29 +209,29 @@ void OrderBook::IterateQuoteGroups(CurrencyPair cp, bool bid, const BookView::Qu
 	}
 }
 
-BidAskPair<int64_t> OrderBook::GetBestPrices(CurrencyPair cp, bool allowSkewSafePrices) const
+BidAskPair<int64_t> OrderBook::GetBestPrices(CurrencyPair cp) const
 {
-	return GetBestPrices(cp, [](bool, BOOK::Quote&) { return true; }, allowSkewSafePrices);
+	return GetBestPrices(cp, [](bool, BOOK::Quote&) { return true; });
 }
 
-int64_t OrderBook::GetBestPrice(CurrencyPair cp, bool bid, bool allowSkewSafePrices) const
+int64_t OrderBook::GetBestPrice(CurrencyPair cp, bool bid) const
 {
-	return GetBestPrice(cp, bid, [](bool, BOOK::Quote&) { return true; }, allowSkewSafePrices);
+	return GetBestPrice(cp, bid, [](bool, BOOK::Quote&) { return true; });
 }
 
-Quote::Ptr OrderBook::GetBestQuote(CurrencyPair cp, bool bid, bool allowSkewSafePrices) const
+Quote::Ptr OrderBook::GetBestQuote(CurrencyPair cp, bool bid) const
 {
-	return GetBestQuote(cp, bid, [](bool, BOOK::Quote&) { return true; }, allowSkewSafePrices);
+	return GetBestQuote(cp, bid, [](bool, BOOK::Quote&) { return true; });
 }
 
-int64_t OrderBook::GetMidPrice(CurrencyPair cp, bool allowSkewSafePrices) const
+int64_t OrderBook::GetMidPrice(CurrencyPair cp) const
 {
-	return GetMidPrice(cp, [](bool, BOOK::Quote&) { return true; }, allowSkewSafePrices);
+	return GetMidPrice(cp, [](bool, BOOK::Quote&) { return true; });
 }
 
-BidAskPair<Quote::Ptr> OrderBook::GetBestQuotes(CurrencyPair cp, bool allowSkewSafePrices) const
+BidAskPair<Quote::Ptr> OrderBook::GetBestQuotes(CurrencyPair cp) const
 {
-	return GetBestQuotes(cp, [](bool, BOOK::Quote&) { return true; }, allowSkewSafePrices);
+	return GetBestQuotes(cp, [](bool, BOOK::Quote&) { return true; });
 }
 
 void OrderBook::Clear()

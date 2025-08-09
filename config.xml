@@ -15,7 +15,7 @@
         <MarketDataTransaction
                 name="MD_OKX"
                 sessions="OKX_TR_01"
-                instruments="ETH/BTC,BTC/USDT"
+                instruments="ETH/BTC"
         />
     </TransactionConfig>
 
