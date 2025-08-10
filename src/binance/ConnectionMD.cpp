@@ -1,6 +1,6 @@
 
 #include "Utils/Result.h"
-#include "binance/Definitions.h"
+#include "Definitions.h"
 #include "binance/ConnectionMD.h"
 #include "binance/ConnectionSS.h"
 

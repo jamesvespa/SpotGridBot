@@ -1,6 +1,6 @@
 #pragma once
 
-#include "binance/Definitions.h"
+#include "Definitions.h"
 #include "ConnectionBase.h"
 #include "JSONDocument.h"
 #include "binance/ConnectionSS.h"

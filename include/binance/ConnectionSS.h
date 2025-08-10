@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "binance/Definitions.h"
+#include "Definitions.h"
 #include "RestBase.h"
 #include "JSONDocument.h"
 
