@@ -4,7 +4,7 @@
 #include "IOrderManager.h"
 
 namespace CORE {
-  // ---------- Enhanced Mock Exchange ----------
+
   class OrderManager : public CORE::IOrderManager{
   public:
     OrderManager(std::shared_ptr<CORE::ConnectionManager> connectionManager) : m_connectionManager(connectionManager) {

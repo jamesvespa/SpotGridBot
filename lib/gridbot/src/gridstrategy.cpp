@@ -45,94 +45,139 @@ namespace STRATEGY {
 
   void GridStrategy::checkFilledOrders()
   {
-    vector<string> toRemove;
+    vector<string> toRemove; // store orders to remove after iteration
+
+    // Loop over all active orders we’re tracking
     for (auto &oid : m_activeOrders)
     {
-      auto maybe = m_orderManager->GetOrder(m_cfg.pair, oid);
-      if (!maybe) continue;
-      Order o = *maybe;
-      if (o.status == OrderStatus::FILLED)
-      {
-        if (m_orderMeta[oid].side==OrderSide::BUY)
+        // Query the exchange/order manager for the latest status of this order
+        auto maybe = m_orderManager->GetOrder(m_cfg.pair, oid);
+        if (!maybe) continue; // If no data (order not found), skip
+
+        Order o = *maybe; // Unwrap the optional
+
+        //-----------------------------
+        // CASE 1: Fully filled orders
+        //-----------------------------
+        if (o.status == OrderStatus::FILLED)
         {
-          double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
-          double btc = m_orderManager->GetBalance("BTC");
-          if (btc > m_cfg.maxPositionBtc + 1e-12)
-          {
-            Logger::warn("Max position exceeded, not placing hedge sell");
-          }
-          else
-          {
-            string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty);
-            m_activeOrders.push_back(newId);
-            m_orderMeta[newId] = {OrderSide::SELL, sellPrice, m_orderMeta[oid].qty};
-          }
-        }
-        else
-        {
-          double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
-          double usdt = m_orderManager->GetBalance("USDT");
-          double cost = buyPrice * m_orderMeta[oid].qty;
-          if (usdt + 1e-12 < cost)
-          {
-            Logger::warn("Insufficient USDT to place rebuy");
-          }
-          else
-          {
-            string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty);
-            m_activeOrders.push_back(newId);
-            m_orderMeta[newId] = {OrderSide::BUY, buyPrice, m_orderMeta[oid].qty};
-          }
-        }
-        toRemove.push_back(oid);
-      }
-      else if (o.status == OrderStatus::PARTIALLY_FILLED)
-      {
-        // handle partial fills: we keep the order live but may place hedge for filled portion
-        double filled = o.filled;
-        double knownFilled = m_knownFills[oid];
-        if (filled - knownFilled > 1e-12)
-        {
-          double delta = filled - knownFilled;
-          m_knownFills[oid] = filled;
-          Logger::info("Detected new partial fill " + oid + " delta=" + to_string(delta));
-          // for filled portion, place opposite order at next step
-          if (m_orderMeta[oid].side==OrderSide::BUY)
-          {
-            double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
-            double btc = m_orderManager->GetBalance("BTC");
-            if (btc <= m_cfg.maxPositionBtc + 1e-12)
+            if (m_orderMeta[oid].side == OrderSide::BUY)
             {
-              string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, delta);
-              m_activeOrders.push_back(newId);
-              m_orderMeta[newId] = {OrderSide::SELL, sellPrice, delta};
+                // Calculate the next sell price (one step above)
+                double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
+
+                // Check if holding too much BTC before selling
+                double btc = m_orderManager->GetBalance("BTC");
+                if (btc > m_cfg.maxPositionBtc + 1e-12)
+                {
+                    Logger::warn("Max position exceeded, not placing hedge sell");
+                }
+                else
+                {
+                    // Place sell order for the same quantity
+                    string newId = m_orderManager->PlaceLimitOrder(
+                        m_cfg.pair, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty
+                    );
+                    // Track the new order
+                    m_activeOrders.push_back(newId);
+                    m_orderMeta[newId] = {OrderSide::SELL, sellPrice, m_orderMeta[oid].qty};
+                }
             }
-          }
-          else
-          {
-            double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
-            double usdt = m_orderManager->GetBalance("USDT");
-            double cost = buyPrice * delta;
-            if (usdt + 1e-12 >= cost)
+            else // It was a SELL order
             {
-              string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, delta);
-              m_activeOrders.push_back(newId);
-              m_orderMeta[newId] = {OrderSide::BUY, buyPrice, delta};
+                // Calculate the next buy price (one step below)
+                double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
+
+                // Check if we have enough USDT to buy back
+                double usdt = m_orderManager->GetBalance("USDT");
+                double cost = buyPrice * m_orderMeta[oid].qty;
+                if (usdt + 1e-12 < cost)
+                {
+                    Logger::warn("Insufficient USDT to place rebuy");
+                }
+                else
+                {
+                    string newId = m_orderManager->PlaceLimitOrder(
+                        m_cfg.pair, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty
+                    );
+                    m_activeOrders.push_back(newId);
+                    m_orderMeta[newId] = {OrderSide::BUY, buyPrice, m_orderMeta[oid].qty};
+                }
             }
-          }
+            // Mark the filled order for removal
+            toRemove.push_back(oid);
         }
-      }
-      else if (o.status == OrderStatus::REJECTED || o.status==OrderStatus::CANCELED)
-      {
-        toRemove.push_back(oid);
-      }
+
+        //-----------------------------
+        // CASE 2: Partially filled orders
+        //-----------------------------
+        else if (o.status == OrderStatus::PARTIALLY_FILLED)
+        {
+            // Get how much is currently filled
+            double filled = o.filled;
+            double knownFilled = m_knownFills[oid]; // what we’ve already processed
+
+            // Check if there's new fill since last check
+            if (filled - knownFilled > 1e-12)
+            {
+                double delta = filled - knownFilled; // amount newly filled
+                m_knownFills[oid] = filled;          // update record
+
+                Logger::info("Detected new partial fill " + oid +
+                             " delta=" + to_string(delta));
+
+                // Place opposite hedge order for just the filled portion
+                if (m_orderMeta[oid].side == OrderSide::BUY)
+                {
+                    double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
+                    double btc = m_orderManager->GetBalance("BTC");
+
+                    // Only place hedge if we’re under the max position
+                    if (btc <= m_cfg.maxPositionBtc + 1e-12)
+                    {
+                        string newId = m_orderManager->PlaceLimitOrder(
+                            m_cfg.pair, OrderSide::SELL, sellPrice, delta
+                        );
+                        m_activeOrders.push_back(newId);
+                        m_orderMeta[newId] = {OrderSide::SELL, sellPrice, delta};
+                    }
+                }
+                else // partial SELL fill
+                {
+                    double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
+                    double usdt = m_orderManager->GetBalance("USDT");
+                    double cost = buyPrice * delta;
+
+                    if (usdt + 1e-12 >= cost)
+                    {
+                        string newId = m_orderManager->PlaceLimitOrder(
+                            m_cfg.pair, OrderSide::BUY, buyPrice, delta
+                        );
+                        m_activeOrders.push_back(newId);
+                        m_orderMeta[newId] = {OrderSide::BUY, buyPrice, delta};
+                    }
+                }
+            }
+        }
+
+        //-----------------------------
+        // CASE 3: Failed or canceled orders
+        //-----------------------------
+        else if (o.status == OrderStatus::REJECTED || o.status == OrderStatus::CANCELED)
+        {
+            toRemove.push_back(oid);
+        }
     }
 
+    //-----------------------------
+    // Remove processed orders
+    //-----------------------------
     for (auto &r : toRemove)
     {
-      m_activeOrders.erase(remove(m_activeOrders.begin(), m_activeOrders.end(), r), m_activeOrders.end());
-      m_orderMeta.erase(r);
-      m_knownFills.erase(r);
+        m_activeOrders.erase(remove(m_activeOrders.begin(), m_activeOrders.end(), r),
+                             m_activeOrders.end());
+        m_orderMeta.erase(r);
+        m_knownFills.erase(r);
     }
   }
 
