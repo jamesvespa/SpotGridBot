@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Definitions.h"
-//#include "ExchangeInformation.h"
 #include "RestConnectionBase.h"
 #include "JSONDocument.h"
 

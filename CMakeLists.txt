@@ -26,6 +26,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include_directories(
             ${SpotGridBot_SOURCE_DIR}/lib/utils/include
             ${SpotGridBot_SOURCE_DIR}/lib/orderbook/include
+            ${SpotGridBot_SOURCE_DIR}/lib/gridbot/include
     )
 
     add_subdirectory(lib/utils)

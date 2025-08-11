@@ -191,7 +191,7 @@ bool ConnectionBase::Send(const std::string &payload)
 UTILS::BoolResult ConnectionBase::PublishQuote(int64_t key, int64_t refKey, int64_t timestamp,
 															 int64_t receiveTime, UTILS::CurrencyPair cp, const UTILS::NormalizedMDData::Entry &entry)
 {
-	m_connectionManager.GetOrderBook().AddEntry(key, refKey, timestamp, receiveTime, cp, entry);
+	m_connectionManager.GetOrderBook()->AddEntry(key, refKey, timestamp, receiveTime, cp, entry);
 
 	return true;
 }

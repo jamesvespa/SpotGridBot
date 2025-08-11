@@ -8,13 +8,13 @@
 #include <vector>
 #include <string>
 
-#include "exchange.h"
+#include "IOrderManager.h"
 
 namespace STRATEGY {
 
   class GridStrategy {
   public:
-    GridStrategy(std::shared_ptr<ExchangeAPI> ex, GridConfig cfg) : m_ex(ex), m_cfg(cfg) {
+    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager), m_cfg(cfg) {
 
     }
     ~GridStrategy() = default;
@@ -26,7 +26,7 @@ namespace STRATEGY {
     void dumpStatus();
 
   private:
-    std::shared_ptr<ExchangeAPI> m_ex;
+    std::shared_ptr<CORE::IOrderManager> m_orderManager;
     GridConfig m_cfg;
     std::vector<std::string> m_activeOrders;
     struct Meta { OrderSide side; double price; double qty; };

@@ -14,6 +14,7 @@
 
 #include "exchange.h"
 #include "gridstrategy.h"
+#include "OrderManager.h"
 
 using namespace CORE;
 using namespace UTILS;
@@ -33,7 +34,7 @@ int main(int argc, char** argv)
 
         CurrencyPair::InitializeCurrencyConfigs();
 
-        BOOK::OrderBook m_orderBook;
+        auto m_orderBook = std::make_shared<BOOK::OrderBook>();
 
         string configPath = "config.json";
         if (argc > 1) configPath = argv[1];
@@ -41,25 +42,24 @@ int main(int argc, char** argv)
         auto cfg = std::make_unique<CRYPTO::JSONDocument>(loadConfig(configPath));
 
         Options options(argc, argv);
-        ConnectionManager connectionManager(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
-        connectionManager.Connect();
+        auto m_connectionManager = make_shared<ConnectionManager>(options.ConfigPath(), options.LoggingPropsPath(), m_orderBook);
+        m_connectionManager->Connect(); //connect market data and populate orderbook.
 
-        auto ex = make_shared<MockExchange>(0, 0.001, 0.001, 0.01, 1.0);
-        ex->setBalances(10000.0, 0.1);
+        auto m_orderManager = make_shared<OrderManager>(m_connectionManager);
 
         sleep(2); //need to implement
 
         GridConfig gcfg;
         gcfg.pair = cfg->GetValue<std::string>("pair");
         auto cp = UTILS::CurrencyPair(gcfg.pair);
-        gcfg.gridBasePrice = cp.CpipToDbl(m_orderBook.GetMidPrice(cp));
+        gcfg.gridBasePrice = cp.CpipToDbl(m_orderBook->GetMidPrice(cp)); //set the price of the bot from the order book.
         gcfg.levelsAbove = cfg->GetValue<int>("levelsAbove");
         gcfg.levelsBelow = cfg->GetValue<int>("levelsBelow");
         gcfg.stepPercent = cfg->GetValue<double>("stepPercent");
         gcfg.perOrderQty = cfg->GetValue<double>("perOrderQty");
         gcfg.maxPositionBtc = cfg->GetValue<int>("maxPositionBtc");
 
-        STRATEGY::GridStrategy strat(ex, gcfg);
+        STRATEGY::GridStrategy strat(m_orderManager, gcfg);
         strat.start();
 
        	poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");

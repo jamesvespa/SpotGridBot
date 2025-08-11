@@ -1,4 +1,5 @@
 #include <sstream>
+#include "Definitions.h"
 #include "RestConnectionBase.h"
 
 #include "Tools.h"
@@ -24,57 +25,57 @@ namespace COINBASE {
 ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager)
 		: RESTAPI::RestConnectionBase(settings, loggingPropsPath, settings.m_name)
 {
-	// GetMessageProcessor().Register([] (std::shared_ptr<CRYPTO::JSONDocument> jd)
-	// 							   {
-	// 								   // Try checking type field 'e'
-	// 								   auto msgType = jd->GetValue<std::string>("e");
-	// 								   if (!msgType.empty())
-	// 								   {
-	// 									   return msgType;
-	// 								   } // it was simple - type was in the field
-	//
-	// 								   // Try error message
-	// 								   // {"error":{"code":3,"msg":"Invalid JSON: expected `,` or `]` at line 4 column 6"}}
-	// 								   if (jd->Has(MSGTYPE_Error))
-	// 								   {
-	// 									   return MSGTYPE_Error;
-	// 								   }
-	//
-	// 								   // Try result message
-	// 								   // {"result":null,"id":1}
-	// 								   if (jd->Has(MSGTYPE_Result) && jd->Has("id"))
-	// 								   {
-	// 									   return MSGTYPE_Result;
-	// 								   }
-	//
-	// 								   return MSGTYPE_Unknown;
-	// 							   } );
-	//
-	//
-	// GetMessageProcessor().Register(MSGTYPE_Result, [this](const std::shared_ptr<CRYPTO::JSONDocument> jd)
-	// {
-	// 	OnMsgResult(jd->GetValue<std::string>("result"), jd->GetValue<int>("id"), true);
-	// });
-	//
-	// GetMessageProcessor().Register(MSGTYPE_Error, [this](const std::shared_ptr<CRYPTO::JSONDocument> jd)
-	// {
-	// 	try
-	// 	{
-	// 		auto errDesc = jd->GetSubObject("error");
-	// 		if (errDesc)
-	// 		{
-	// 			OnMsgError(errDesc->get("code").convert<int>(), errDesc->get("msg").toString(), true);
-	// 		}
-	// 		else
-	// 		{
-	// 			OnMsgError(0, "", UTILS::BoolResult(false, "Invalid error message descriptor"));
-	// 		}
-	// 	}
-	// 	catch (std::exception &e)
-	// 	{
-	// 		OnMsgError(0, "", UTILS::BoolResult(false, "Invalid error message descriptor: %s", std::string(e.what())));
-	// 	}
-	// });
+	GetMessageProcessor().Register([] (std::shared_ptr<CRYPTO::JSONDocument> jd)
+								   {
+									   // Try checking type field 'e'
+									   auto msgType = jd->GetValue<std::string>("e");
+									   if (!msgType.empty())
+									   {
+										   return msgType;
+									   } // it was simple - type was in the field
+
+									   // Try error message
+									   // {"error":{"code":3,"msg":"Invalid JSON: expected `,` or `]` at line 4 column 6"}}
+									   if (jd->Has(MSGTYPE_Error))
+									   {
+										   return MSGTYPE_Error;
+									   }
+
+									   // Try result message
+									   // {"result":null,"id":1}
+									   if (jd->Has(MSGTYPE_Result) && jd->Has("id"))
+									   {
+										   return MSGTYPE_Result;
+									   }
+
+									   return MSGTYPE_Unknown;
+								   } );
+
+
+	GetMessageProcessor().Register(MSGTYPE_Result, [this](const std::shared_ptr<CRYPTO::JSONDocument> jd)
+	{
+		OnMsgResult(jd->GetValue<std::string>("result"), jd->GetValue<int>("id"), true);
+	});
+
+	GetMessageProcessor().Register(MSGTYPE_Error, [this](const std::shared_ptr<CRYPTO::JSONDocument> jd)
+	{
+		try
+		{
+			auto errDesc = jd->GetSubObject("error");
+			if (errDesc)
+			{
+				OnMsgError(errDesc->get("code").convert<int>(), errDesc->get("msg").toString(), true);
+			}
+			else
+			{
+				OnMsgError(0, "", UTILS::BoolResult(false, "Invalid error message descriptor"));
+			}
+		}
+		catch (std::exception &e)
+		{
+			OnMsgError(0, "", UTILS::BoolResult(false, "Invalid error message descriptor: %s", std::string(e.what())));
+		}
+	});
 }
 //------------------------------------------------------------------------------
 /*! \brief called when Result message received

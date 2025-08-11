@@ -29,7 +29,7 @@ using namespace UTILS;
 
 namespace CORE {
 
-ConnectionManager::ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, BOOK::OrderBook& orderBook)
+ConnectionManager::ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, std::shared_ptr<BOOK::OrderBook> orderBook)
 	: Logging("ConnectionManager"), ErrorHandler(pLogger()), m_configPath(configPath), m_loggingPropsPath(loggingPropsPath), m_orderBook(orderBook) {
 
 	// Register supported connection types

@@ -15,7 +15,7 @@ namespace CORE {
 class ConnectionManager final : UTILS::Logging, public UTILS::ErrorHandler
 {
 public:
-	ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, BOOK::OrderBook& orderBook);
+	ConnectionManager(const std::string& configPath, const std::string& loggingPropsPath, std::shared_ptr<BOOK::OrderBook> orderBook);
 
 	~ConnectionManager() {
 		Disconnect();
@@ -48,7 +48,7 @@ public:
 		return m_settingsCollection;
 	}
 
-	BOOK::OrderBook& GetOrderBook() const {
+	std::shared_ptr<BOOK::OrderBook> GetOrderBook() const {
 		return m_orderBook;
 	}
 
@@ -69,7 +69,7 @@ protected:
 
 private:
 	
-	 TSettingsCollection m_settingsCollection;
+	TSettingsCollection m_settingsCollection;
 	
 	std::map<std::string, TConnectionCreator> m_connectionsFactory;
 	std::string m_configPath;
@@ -79,7 +79,7 @@ private:
 	TSessionsInstruments m_sessionsInstruments;
 
 	std::map<std::string, std::shared_ptr<CRYPTO::IConnection>> m_connections;
-	BOOK::OrderBook &m_orderBook;
+	std::shared_ptr<BOOK::OrderBook> m_orderBook;
 }; // ConnectionManager
 
 } // namespace CORE

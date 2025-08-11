@@ -3,7 +3,10 @@
 #include <bits/stdc++.h>
 #include <chrono>
 #include <thread>
+#include "exchange.h"
 #include "gridstrategy.h"
+
+#include "IOrderManager.h"
 
 using namespace std;
 namespace STRATEGY {
@@ -25,7 +28,7 @@ namespace STRATEGY {
     for (int i=1;i<=m_cfg.levelsBelow;i++)
     {
       double price = base * (1.0 - step * i);
-      string oid = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::BUY, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, price, m_cfg.perOrderQty);
       m_activeOrders.push_back(oid);
       m_orderMeta[oid] = {OrderSide::BUY, price, m_cfg.perOrderQty};
     }
@@ -33,7 +36,7 @@ namespace STRATEGY {
     for (int i=1;i<=m_cfg.levelsAbove;i++)
     {
       double price = base * (1.0 + step * i);
-      string oid = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::SELL, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, price, m_cfg.perOrderQty);
       m_activeOrders.push_back(oid);
       m_orderMeta[oid] = {OrderSide::SELL, price, m_cfg.perOrderQty};
     }
@@ -45,7 +48,7 @@ namespace STRATEGY {
     vector<string> toRemove;
     for (auto &oid : m_activeOrders)
     {
-      auto maybe = m_ex->getOrder(m_cfg.pair, oid);
+      auto maybe = m_orderManager->GetOrder(m_cfg.pair, oid);
       if (!maybe) continue;
       Order o = *maybe;
       if (o.status == OrderStatus::FILLED)
@@ -53,14 +56,14 @@ namespace STRATEGY {
         if (m_orderMeta[oid].side==OrderSide::BUY)
         {
           double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
-          double btc = m_ex->getBalance("BTC");
+          double btc = m_orderManager->GetBalance("BTC");
           if (btc > m_cfg.maxPositionBtc + 1e-12)
           {
             Logger::warn("Max position exceeded, not placing hedge sell");
           }
           else
           {
-            string newId = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty);
+            string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty);
             m_activeOrders.push_back(newId);
             m_orderMeta[newId] = {OrderSide::SELL, sellPrice, m_orderMeta[oid].qty};
           }
@@ -68,7 +71,7 @@ namespace STRATEGY {
         else
         {
           double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
-          double usdt = m_ex->getBalance("USDT");
+          double usdt = m_orderManager->GetBalance("USDT");
           double cost = buyPrice * m_orderMeta[oid].qty;
           if (usdt + 1e-12 < cost)
           {
@@ -76,7 +79,7 @@ namespace STRATEGY {
           }
           else
           {
-            string newId = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty);
+            string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty);
             m_activeOrders.push_back(newId);
             m_orderMeta[newId] = {OrderSide::BUY, buyPrice, m_orderMeta[oid].qty};
           }
@@ -97,10 +100,10 @@ namespace STRATEGY {
           if (m_orderMeta[oid].side==OrderSide::BUY)
           {
             double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
-            double btc = m_ex->getBalance("BTC");
+            double btc = m_orderManager->GetBalance("BTC");
             if (btc <= m_cfg.maxPositionBtc + 1e-12)
             {
-              string newId = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, delta);
+              string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, sellPrice, delta);
               m_activeOrders.push_back(newId);
               m_orderMeta[newId] = {OrderSide::SELL, sellPrice, delta};
             }
@@ -108,11 +111,11 @@ namespace STRATEGY {
           else
           {
             double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
-            double usdt = m_ex->getBalance("USDT");
+            double usdt = m_orderManager->GetBalance("USDT");
             double cost = buyPrice * delta;
             if (usdt + 1e-12 >= cost)
             {
-              string newId = m_ex->placeLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, delta);
+              string newId = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, buyPrice, delta);
               m_activeOrders.push_back(newId);
               m_orderMeta[newId] = {OrderSide::BUY, buyPrice, delta};
             }
