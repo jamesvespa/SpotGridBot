@@ -53,7 +53,7 @@ struct Settings
 	std::string m_passphrase;
 	// With recvWindow, you can specify that the request must be processed within
 	// a certain number of milliseconds or be rejected by the server
-	// (this is possibly exchange specific (binance))
+	// (this is possibly exchange-specific (binance))
 	int m_recvWindow { };
 	
 	std::string m_channels;
@@ -67,8 +67,8 @@ struct Settings
 	
 	// Specific parameters for each configuration <name:value>
 	std::map<std::string, std::string> m_parameters;
-	
-	// Returns parameter value by name (defaultValue if not found)
+
+	// Returns a parameter value by name (defaultValue if not found)
 	std::string GetParameter(const std::string &name, const std::string &defaultValue = "") const
 	{
 		const auto iter = m_parameters.find(name);

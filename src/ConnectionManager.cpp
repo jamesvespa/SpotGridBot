@@ -17,10 +17,10 @@
 #include "Config.h"
 #include "ConnectionManager.h"
 
-
 #include "binance/ConnectionMD.h"
 #include "binance/ConnectionORD.h"
 #include "coinbase/ConnectionMD.h"
+#include "coinbase/ConnectionORD.h"
 #include "OKX/ConnectionMD.h"
 #include "OKX/ConnectionORD.h"
 #include "SchemaDefs.h"
@@ -36,6 +36,7 @@ ConnectionManager::ConnectionManager(const std::string& configPath, const std::s
 	RegisterConnectionCreator<BINANCE::ConnectionMD>(BINANCE::SCHEMAMD);
 	RegisterConnectionCreator<BINANCE::ConnectionORD>(BINANCE::SCHEMAORD);
 	RegisterConnectionCreator<COINBASE::ConnectionMD>(COINBASE::SCHEMAMD);
+	RegisterConnectionCreator<COINBASE::ConnectionORD>(COINBASE::SCHEMAORD);
 	RegisterConnectionCreator<OKX::ConnectionMD>(OKX::SCHEMAMD);
 	RegisterConnectionCreator<OKX::ConnectionORD>(OKX::SCHEMAORD);
 
@@ -57,14 +58,26 @@ void ConnectionManager::CreateSession(int64_t numId)
 	}
 
 	m_connections.emplace( m_settingsCollection[numId].m_name, creator(m_settingsCollection[numId]) );
+
+	if ( m_settingsCollection[numId].m_name.find(":ORD") !=std::string::npos ) {
+		m_orderConnection = m_settingsCollection[numId].m_name;
+	}
 }
 
 void ConnectionManager::Connect()
 {
-	for ( auto iter=m_connections.begin(); iter!=m_connections.end(); ++iter) {
+	for ( auto iter=m_connections.begin(); iter!=m_connections.end(); ++iter)
+	{
 		auto conn = *iter;
-		conn.second->Connect();
-	};
+		if (conn.second->Connect() )
+		{
+			poco_information_f1(logger(), "Connected session [%s] ", conn.first );
+		}
+		else
+		{
+			poco_warning_f1(logger(), "Failed to connect session [%s] ", conn.first );
+		}
+	}
 }
 
 void ConnectionManager::Disconnect()

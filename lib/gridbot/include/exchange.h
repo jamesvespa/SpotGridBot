@@ -3,8 +3,13 @@
 //
 #pragma once
 
+#include <optional>
+#include <string>
+#include <fstream>
 #include <memory>
 #include <unordered_map>
+
+#include "Utils/FixTypes.h"
 
 // Very small JSON parsing helper tuned for our simple config file.
 // Not a full JSON parser — acceptable for PoC.
@@ -50,7 +55,7 @@ enum class OrderStatus { NEW, PARTIALLY_FILLED, FILLED, CANCELED, REJECTED };
 
 struct Order {
   std::string id;
-  OrderSide side;
+  UTILS::Side side;
   double price;
   double quantity;      // original quantity
   double filled = 0.0;  // filled so far
@@ -61,7 +66,7 @@ class ExchangeAPI {
 public:
   virtual ~ExchangeAPI() = default;
   virtual Ticker getTicker(const std::string &pair) = 0;
-  virtual std::string placeLimitOrder(const std::string &pair, OrderSide side, double price, double qty) = 0;
+  virtual std::string placeLimitOrder(const std::string &pair, UTILS::Side side, double price, double qty) = 0;
   virtual bool cancelOrder(const std::string &pair, const std::string &orderId) = 0;
   virtual std::optional<Order> getOrder(const std::string &pair, const std::string &orderId) = 0;
   virtual double getBalance(const std::string &asset) = 0;
@@ -85,7 +90,7 @@ public:
     return {price - spread, price + spread, price};
   }
 
-  std::string placeLimitOrder(const std::string &pair, OrderSide side, double p, double q) override {
+  std::string placeLimitOrder(const std::string &pair, UTILS::Side side, double p, double q) override {
     std::lock_guard<std::mutex> g(m);
     Order o;
     o.id = "o" + std::to_string(nextId++);
@@ -95,7 +100,7 @@ public:
     o.filled = 0.0;
     o.status = OrderStatus::NEW;
     orders[o.id] = o;
-    Logger::info("Placed order " + o.id + " " + (side==OrderSide::BUY?"BUY":"SELL")
+    Logger::info("Placed order " + o.id + " " + (side == UTILS::Side::BUY ? "BUY" : "SELL")
                  + " @" + std::to_string(p) + " qty=" + std::to_string(q));
     return o.id;
   }
@@ -132,8 +137,8 @@ public:
       auto &o = kv.second;
       if (o.status == OrderStatus::FILLED || o.status == OrderStatus::CANCELED || o.status==OrderStatus::REJECTED) continue;
       bool cross = false;
-      if (o.side==OrderSide::BUY && price <= o.price + 1e-12) cross = true;
-      if (o.side==OrderSide::SELL && price >= o.price - 1e-12) cross = true;
+      if (o.side==UTILS::Side::BUY && price <= o.price + 1e-12) cross = true;
+      if (o.side==UTILS::Side::SELL && price >= o.price - 1e-12) cross = true;
       if (!cross) continue;
       // determine partial fill pct
       double pct = partialMinPct + (double)(rand())/RAND_MAX * (partialMaxPct - partialMinPct);
@@ -144,7 +149,7 @@ public:
       // slippage applied to execution price
       double slip = ( (double)rand()/RAND_MAX * 2.0 - 1.0 ) * slippageMax;
       double execPrice = o.price * (1.0 + slip);
-      if (o.side==OrderSide::BUY) {
+      if (o.side==UTILS::Side::BUY) {
         double cost = fillQty * execPrice;
         if (usdt + 1e-12 < cost) {
           o.status = OrderStatus::REJECTED;

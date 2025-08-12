@@ -15,8 +15,8 @@ namespace STRATEGY {
 
   class GridStrategy {
   public:
-    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager),
-    m_cfg(cfg), m_cp(m_cfg.pair) {
+    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager), m_cfg(cfg), m_cp(m_cfg.pair)
+    {
     }
 
     ~GridStrategy() = default;
@@ -31,7 +31,7 @@ namespace STRATEGY {
     std::shared_ptr<CORE::IOrderManager> m_orderManager;
     GridConfig m_cfg;
     std::vector<std::string> m_activeOrders;
-    struct Meta { OrderSide side; double price; double qty; };
+    struct Meta { UTILS::Side side; double price; double qty; };
 
     std::unordered_map<std::string, Meta> m_orderMeta;
     std::unordered_map<std::string, double> m_knownFills;

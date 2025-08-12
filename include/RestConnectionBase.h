@@ -144,7 +144,7 @@ private:
 
 	CRYPTO::MessageProcessor m_messageProcessor;
 	
-	mutable TOrderTransactions m_orderTransactions;
+	TOrderTransactions m_orderTransactions;
 };
 }
 }

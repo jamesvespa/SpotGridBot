@@ -7,6 +7,7 @@
 
 #include "Utils/Logging.h"
 #include "ConnectionBase.h"
+#include "RestConnectionBase.h"
 #include "OrderBook/OrderBook.h"
 #include "Utils/ErrorHandler.h"
 
@@ -56,8 +57,6 @@ public:
 	bool LoadConfig();
 	bool LoadConfig(const UTILS::XmlDocPtr &pDoc);
 
-protected:
-
 	template <typename TConnection>
 	void RegisterConnectionCreator(const std::string &schema)
 	{
@@ -67,6 +66,9 @@ protected:
 									});
 	}
 
+	std::shared_ptr<RESTAPI::RestConnectionBase> OrderConnection() {
+		return std::static_pointer_cast<RESTAPI::RestConnectionBase>(m_connections[m_orderConnection]);
+	}
 private:
 	
 	TSettingsCollection m_settingsCollection;
@@ -80,6 +82,7 @@ private:
 
 	std::map<std::string, std::shared_ptr<CRYPTO::IConnection>> m_connections;
 	std::shared_ptr<BOOK::OrderBook> m_orderBook;
+	std::string m_orderConnection; //Name of order connection
 }; // ConnectionManager
 
 } // namespace CORE
