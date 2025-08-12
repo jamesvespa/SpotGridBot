@@ -68,7 +68,7 @@ namespace STRATEGY {
                 double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
 
                 // Check if holding too much BTC before selling
-                double btc = m_orderManager->GetBalance("BTC");
+                double btc = m_orderManager->GetBalance(m_cp.BaseCCY().ToString());
                 if (btc > m_cfg.maxPositionBtc + 1e-12)
                 {
                     Logger::warn("Max position exceeded, not placing hedge sell");
@@ -87,12 +87,12 @@ namespace STRATEGY {
                 // Calculate the next buy price (one step below)
                 double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
 
-                // Check if we have enough USDT to buy back
-                double usdt = m_orderManager->GetBalance("USDT");
+                // Check if we have enough 'terminating currency' to buy back
+                double usdt = m_orderManager->GetBalance(m_cp.QuoteCCY().ToString());
                 double cost = buyPrice * m_orderMeta[oid].qty;
                 if (usdt + 1e-12 < cost)
                 {
-                    Logger::warn("Insufficient USDT to place rebuy");
+                    Logger::warn("Insufficient 'terminating currency' to place rebuy");
                 }
                 else
                 {
@@ -131,9 +131,7 @@ namespace STRATEGY {
                     // Only place hedge if we’re under the max position
                     if (btc <= m_cfg.maxPositionBtc + 1e-12)
                     {
-                        string newId = m_orderManager->PlaceLimitOrder(
-                            m_cp, OrderSide::SELL, sellPrice, delta
-                        );
+                        string newId = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::SELL, sellPrice, delta);
                         m_activeOrders.push_back(newId);
                         m_orderMeta[newId] = {OrderSide::SELL, sellPrice, delta};
                     }

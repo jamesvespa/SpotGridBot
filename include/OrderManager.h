@@ -5,7 +5,7 @@
 
 namespace CORE {
 
-  class OrderManager : public CORE::IOrderManager{
+  class OrderManager : public CORE::IOrderManager {
   public:
     OrderManager(std::shared_ptr<CORE::ConnectionManager> connectionManager) : m_connectionManager(connectionManager) {
     }

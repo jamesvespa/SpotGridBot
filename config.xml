@@ -1,25 +1,4 @@
 <Configuration>
-    <TransactionConfig>
-        <MarketDataTransaction
-                name="MD_Coinbase"
-                sessions="COINBASEMD"
-                instruments="ETH/BTC"
-        />
-
-        <MarketDataTransaction
-                name="MD_Binance"
-                sessions="BINANCEMD"
-                instruments="ETH/BTC"
-        />
-
-        <MarketDataTransaction
-                name="MD_OKX"
-                sessions="OKX_TR_01"
-                instruments="ETH/BTC"
-        />
-    </TransactionConfig>
-
-    <!-- Element <LPConfig>: configuration of liquidity providers -->
 
 <!--    Binance API Key-->
 <!--    KWBUPUMW7F7JAP1SijCl2pmoce0fvKv5OZsSU11nsPSf5hot2oPDadfw6dRxZGEg-->
@@ -43,7 +22,6 @@
 <!--                 num_id="2"-->
 <!--                 protocol="rest"-->
 <!--                 orders_http="https://testnet.binance.vision/api/v3/order"-->
-<!--                 exchange_info_http="https://api.binance.com/api/v3/exchangeInfo"-->
 <!--                 api_key="OT1K4NO9vwLG4wK9SNeM58hK8GRmEcFS3B7ndJxSDndmoEXnX5H2srazykMF8tG6"-->
 <!--                 secret_key="KpiPB5ahHOsLg5cRhjg6Sl1mUahK41CywkDEPPTDf7eqDZnIFMJkGH7RHSSq4WZw"-->
 <!--                 recv_window="5000"-->
@@ -62,6 +40,7 @@
                      port="443"
                      channels="level2_batch,heartbeat"
                      schema="Coinbase:MD"
+                     instruments="ETH/BTC"
         />
 
         <Session name="COINBASEORD"
@@ -69,9 +48,10 @@
                      protocol="rest"
                      host="https://api-public.sandbox.exchange.coinbase.com"
                      _host="https://api.exchange.coinbase.com/"
-                     _api_key="organizations/a9df3ebf-0eb3-4667-8f8c-493ea6e5f73f/apiKeys/ea944a2e-fc2f-41b4-8044-93b390e94d48"
-                     secret_key=""
+                     api_key="oAXa9pSRamuasbEwGmfbxfQt0+VKiaqIqopQg3JLAEBsxI9RLyt+9j0cSh3Bb2siLTk+8tdVjBWvFGEpj/KI/A=="
+                     secret_key="oAXa9pSRamuasbEwGmfbxfQt0+VKiaqIqopQg3JLAEBsxI9RLyt+9j0cSh3Bb2siLTk+8tdVjBWvFGEpj/KI/A=="
                      port="443"
+                     password="k1y9daypbz8k"
                      schema="Coinbase:ORD"
         />
 

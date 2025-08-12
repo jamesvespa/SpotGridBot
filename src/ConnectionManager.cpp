@@ -87,38 +87,7 @@ bool ConnectionManager::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 	try
 	{
 		std::string errMsg;
-		
-		// Read market data transactions
-		if (auto *baseNode = GetConfigNode(pDoc, CORE::CRYPTO::TAG_TRANSACTION_CONFIG, &errMsg))
-		{
-			if (baseNode->hasChildNodes())
-			{
-				Poco::XML::NodeList *children { baseNode->childNodes() };
-				if (children)
-				{
-					for (long unsigned int i = 0; i < children->length(); ++i)
-					{
-						Poco::XML::Node *childNode = children->item(i);
-						if (childNode->nodeType() == Poco::XML::Node::ELEMENT_NODE)
-						{
-							const std::string session = UTILS::GetXmlAttribute(childNode, CORE::CRYPTO::ATTR_SESSIONS, "");
-							const std::string instruments = UTILS::GetXmlAttribute(childNode, CORE::CRYPTO::ATTR_INSTRUMENTS, "");
 
-							auto sessIter = m_sessionsInstruments.find(session);
-							if (sessIter != m_sessionsInstruments.cend())
-							{
-								poco_error_f1(logger(), "Session '%s' has already been configured in "
-														"another market data transaction. Ignored.", session);
-								continue;
-							}
-							m_sessionsInstruments[session] = instruments;
-							poco_information_f2(logger(), "Added instruments configuration for session: '%s' -> '%s'", session, instruments);
-						}
-					}
-				}
-			}
-		}
-		
 		// Read sessions
 		//--------------
 		if (auto *baseNode = GetConfigNode(pDoc, CORE::CRYPTO::TAG_SESSION_CONFIG, &errMsg))
@@ -150,22 +119,14 @@ bool ConnectionManager::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 							settings.m_secretkey = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_SECRETKEY, "");
 							settings.m_recvWindow = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_RECVWINDOW, CRYPTO::ATTR_RECVWINDOW_DEFAULT);
 							settings.m_channels = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_CHANNELS, "");
-							
-							auto sessIter = m_sessionsInstruments.find(settings.m_name);
-							if (sessIter == m_sessionsInstruments.cend())
-							{
-								poco_error_f2(logger(), "Session '%s' has no configured instruments in %s. Ignored.",
-                                                settings.m_name, CORE::CRYPTO::TAG_TRANSACTION_CONFIG);
-                                continue;
 
-                            }
-                            settings.m_instruments = sessIter->second;
 							settings.m_depth = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_DEPTH, 0);
 							settings.m_protocol = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_PROTOCOL, "ws");
 
 							settings.m_username = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_USERNAME, "");
 							settings.m_password = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_PASSWORD, "");
 							settings.m_schema = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_SCHEMA, "");
+							settings.m_instruments = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_INSTRUMENTS, "");
 							
 							// Load parameters
 							if (auto *paramNodes = childNode->childNodes())
