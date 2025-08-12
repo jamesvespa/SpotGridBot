@@ -10,7 +10,7 @@ namespace CORE {
     OrderManager(std::shared_ptr<CORE::ConnectionManager> connectionManager) : m_connectionManager(connectionManager) {
     }
 
-    std::string PlaceLimitOrder(const std::string &pair, OrderSide side, double p, double q) override {
+    std::string PlaceLimitOrder(const UTILS::CurrencyPair cp, OrderSide side, double p, double q) override {
       std::lock_guard<std::mutex> g(m_mutex);
       Order o;
       o.id = "o" + std::to_string(nextId++);
@@ -23,10 +23,11 @@ namespace CORE {
 
       Logger::info("Placed order " + o.id + " " + (side==OrderSide::BUY?"BUY":"SELL")
                    + " @" + std::to_string(p) + " qty=" + std::to_string(q));
+
       return o.id;
     }
 
-    bool CancelOrder(const std::string &pair, const std::string &orderId) override {
+    bool CancelOrder(const UTILS::CurrencyPair cp, const std::string &orderId) override {
       std::lock_guard<std::mutex> g(m_mutex);
 
       if (!m_orders.count(orderId))
@@ -42,7 +43,7 @@ namespace CORE {
       return true;
     }
 
-    std::optional<Order> GetOrder(const std::string &pair, const std::string &orderId) override {
+    std::optional<Order> GetOrder(const UTILS::CurrencyPair cp, const std::string &orderId) override {
       std::lock_guard<std::mutex> g(m_mutex);
 
       if (!m_orders.count(orderId))

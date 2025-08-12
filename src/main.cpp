@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 
         auto m_orderManager = make_shared<OrderManager>(m_connectionManager);
 
-        sleep(2); //need to implement
+        sleep(2); //need to implement wait
 
         GridConfig gcfg;
         gcfg.pair = cfg->GetValue<std::string>("pair");
@@ -61,6 +61,8 @@ int main(int argc, char** argv)
 
         STRATEGY::GridStrategy strat(m_orderManager, gcfg);
         strat.start();
+
+        //strat.onTicker();
 
        	poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");
         std::cin.get();

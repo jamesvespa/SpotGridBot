@@ -9,14 +9,16 @@
 #include <string>
 
 #include "IOrderManager.h"
+#include "Utils/CurrencyPair.h"
 
 namespace STRATEGY {
 
   class GridStrategy {
   public:
-    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager), m_cfg(cfg) {
-
+    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager),
+    m_cfg(cfg), m_cp(m_cfg.pair) {
     }
+
     ~GridStrategy() = default;
 
     void start();
@@ -33,5 +35,6 @@ namespace STRATEGY {
 
     std::unordered_map<std::string, Meta> m_orderMeta;
     std::unordered_map<std::string, double> m_knownFills;
+    UTILS::CurrencyPair m_cp;
   };
 }

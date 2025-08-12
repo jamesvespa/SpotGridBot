@@ -7,6 +7,7 @@
 #include "gridstrategy.h"
 
 #include "IOrderManager.h"
+#include "Utils/CurrencyPair.h"
 
 using namespace std;
 namespace STRATEGY {
@@ -28,7 +29,7 @@ namespace STRATEGY {
     for (int i=1;i<=m_cfg.levelsBelow;i++)
     {
       double price = base * (1.0 - step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::BUY, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::BUY, price, m_cfg.perOrderQty);
       m_activeOrders.push_back(oid);
       m_orderMeta[oid] = {OrderSide::BUY, price, m_cfg.perOrderQty};
     }
@@ -36,7 +37,7 @@ namespace STRATEGY {
     for (int i=1;i<=m_cfg.levelsAbove;i++)
     {
       double price = base * (1.0 + step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cfg.pair, OrderSide::SELL, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::SELL, price, m_cfg.perOrderQty);
       m_activeOrders.push_back(oid);
       m_orderMeta[oid] = {OrderSide::SELL, price, m_cfg.perOrderQty};
     }
@@ -51,7 +52,7 @@ namespace STRATEGY {
     for (auto &oid : m_activeOrders)
     {
         // Query the exchange/order manager for the latest status of this order
-        auto maybe = m_orderManager->GetOrder(m_cfg.pair, oid);
+        auto maybe = m_orderManager->GetOrder(m_cp, oid);
         if (!maybe) continue; // If no data (order not found), skip
 
         Order o = *maybe; // Unwrap the optional
@@ -75,9 +76,7 @@ namespace STRATEGY {
                 else
                 {
                     // Place sell order for the same quantity
-                    string newId = m_orderManager->PlaceLimitOrder(
-                        m_cfg.pair, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty
-                    );
+                    string newId = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::SELL, sellPrice, m_orderMeta[oid].qty);
                     // Track the new order
                     m_activeOrders.push_back(newId);
                     m_orderMeta[newId] = {OrderSide::SELL, sellPrice, m_orderMeta[oid].qty};
@@ -97,9 +96,7 @@ namespace STRATEGY {
                 }
                 else
                 {
-                    string newId = m_orderManager->PlaceLimitOrder(
-                        m_cfg.pair, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty
-                    );
+                    string newId = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::BUY, buyPrice, m_orderMeta[oid].qty);
                     m_activeOrders.push_back(newId);
                     m_orderMeta[newId] = {OrderSide::BUY, buyPrice, m_orderMeta[oid].qty};
                 }
@@ -123,20 +120,19 @@ namespace STRATEGY {
                 double delta = filled - knownFilled; // amount newly filled
                 m_knownFills[oid] = filled;          // update record
 
-                Logger::info("Detected new partial fill " + oid +
-                             " delta=" + to_string(delta));
+                Logger::info("Detected new partial fill " + oid + " delta=" + to_string(delta));
 
                 // Place opposite hedge order for just the filled portion
                 if (m_orderMeta[oid].side == OrderSide::BUY)
                 {
                     double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
-                    double btc = m_orderManager->GetBalance("BTC");
+                    double btc = m_orderManager->GetBalance(m_cp.BaseCCY().ToString());
 
                     // Only place hedge if we’re under the max position
                     if (btc <= m_cfg.maxPositionBtc + 1e-12)
                     {
                         string newId = m_orderManager->PlaceLimitOrder(
-                            m_cfg.pair, OrderSide::SELL, sellPrice, delta
+                            m_cp, OrderSide::SELL, sellPrice, delta
                         );
                         m_activeOrders.push_back(newId);
                         m_orderMeta[newId] = {OrderSide::SELL, sellPrice, delta};
@@ -145,14 +141,12 @@ namespace STRATEGY {
                 else // partial SELL fill
                 {
                     double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
-                    double usdt = m_orderManager->GetBalance("USDT");
+                    double usdt = m_orderManager->GetBalance(m_cp.QuoteCCY().ToString());
                     double cost = buyPrice * delta;
 
                     if (usdt + 1e-12 >= cost)
                     {
-                        string newId = m_orderManager->PlaceLimitOrder(
-                            m_cfg.pair, OrderSide::BUY, buyPrice, delta
-                        );
+                        string newId = m_orderManager->PlaceLimitOrder(m_cp, OrderSide::BUY, buyPrice, delta);
                         m_activeOrders.push_back(newId);
                         m_orderMeta[newId] = {OrderSide::BUY, buyPrice, delta};
                     }
