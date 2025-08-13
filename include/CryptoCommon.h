@@ -28,5 +28,6 @@ public:
 	Levels Asks;
 };
 
+typedef const std::tuple<std::string, std::string, std::string, std::string> AuthHeader;
 }
 }

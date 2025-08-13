@@ -59,7 +59,7 @@ void ConnectionManager::CreateSession(int64_t numId)
 
 	m_connections.emplace( m_settingsCollection[numId].m_name, creator(m_settingsCollection[numId]) );
 
-	if ( m_settingsCollection[numId].m_name.find(":ORD") !=std::string::npos ) {
+	if ( m_settingsCollection[numId].m_schema.find(":ORD") !=std::string::npos ) {
 		m_orderConnection = m_settingsCollection[numId].m_name;
 	}
 }
@@ -136,8 +136,7 @@ bool ConnectionManager::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 							settings.m_depth = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_DEPTH, 0);
 							settings.m_protocol = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_PROTOCOL, "ws");
 
-							settings.m_username = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_USERNAME, "");
-							settings.m_password = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_PASSWORD, "");
+							settings.m_passphrase = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_PASSPHRASE, "");
 							settings.m_schema = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_SCHEMA, "");
 							settings.m_instruments = UTILS::GetXmlAttribute(childNode, CRYPTO::ATTR_INSTRUMENTS, "");
 							

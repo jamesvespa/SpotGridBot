@@ -14,8 +14,6 @@ const char *const MSG_TYPE_L2UPDATE = "l2update";
 const char *const MSG_TYPE_HEARTBEAT = "heartbeat";
 const char *const MSG_TYPE_SUBSCRIPTIONS = "subscriptions";
 
-typedef const std::tuple<std::string, std::string, std::string, std::string> AuthHeader;
-
 class ConnectionMD : public CORE::CRYPTO::ConnectionBase
 {
 public:
@@ -54,7 +52,7 @@ private:
 
 	void Subscribe(const CRYPTO::ConnectionBase::TInstruments &instruments, const std::string &method, const std::string &channel);
 
-	const AuthHeader GetAuthHeader();
+	const CRYPTO::AuthHeader GetAuthHeader();
 };
 }
 }

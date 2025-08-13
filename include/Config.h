@@ -30,8 +30,7 @@ const std::string ATTR_PARAMETER_NAME = "name";
 const std::string ATTR_PARAMETER_VALUE = "value";
 const std::string ATTR_DEPTH = "depth";
 const std::string ATTR_PROTOCOL = "protocol";
-const std::string ATTR_USERNAME = "username";
-const std::string ATTR_PASSWORD = "password";
+const std::string ATTR_PASSPHRASE = "passphrase";
 const std::string ATTR_SCHEMA = "schema";
 
 
@@ -61,8 +60,6 @@ struct Settings
 	unsigned int m_depth { 0 };
 	std::string m_protocol;
 
-	std::string m_username;
-	std::string m_password;
 	std::string m_schema;
 	
 	// Specific parameters for each configuration <name:value>

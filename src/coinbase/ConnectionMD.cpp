@@ -31,10 +31,8 @@ namespace CORE {
                 PublishQuotes(ParseQuote(update->Bids, QuoteType::BID, cp));
                 PublishQuotes(ParseQuote(update->Asks, QuoteType::OFFER, cp));
 
-                poco_information_f2(logger(), "QT_SNAPSHOT %s bid Levels: %d ", cp.ToString(),
-                                    int(update->Bids.size()));
-                poco_information_f2(logger(), "QT_SNAPSHOT %s ask Levels: %d ", cp.ToString(),
-                                    int(update->Asks.size()));
+                poco_information_f2(logger(), "QT_SNAPSHOT %s bid Levels: %d ", cp.ToString(), int(update->Bids.size()));
+                poco_information_f2(logger(), "QT_SNAPSHOT %s ask Levels: %d ", cp.ToString(), int(update->Asks.size()));
             });
 
             GetMessageProcessor().Register(MSG_TYPE_L2UPDATE, [this](const std::shared_ptr<CRYPTO::JSONDocument> jd) {
@@ -73,7 +71,7 @@ namespace CORE {
         }
 
         //Create a Market Data authentication signature
-        const AuthHeader ConnectionMD::GetAuthHeader() {
+        const CRYPTO::AuthHeader ConnectionMD::GetAuthHeader() {
             auto cb_access_timestamp = std::to_string(UTILS::CurrentTimestamp() / 1000000000); //as seconds
             auto cb_access_method{"GET"};
             auto cb_access_request_path{"/users/self/verify"};
@@ -82,12 +80,10 @@ namespace CORE {
             auto msg = cb_access_timestamp + cb_access_method + cb_access_request_path;
 
             const auto decodedKey = libbase64::decode<std::string, char, unsigned char, true>(m_settings.m_secretkey);
-            const auto digest = HMAC(EVP_sha256(), decodedKey.c_str(), decodedKey.size(), (unsigned char *) msg.c_str(),
-                                     msg.size(), NULL, NULL);
-            const auto cb_access_sign = libbase64::encode<std::string, char, unsigned char, true>(
-                digest, SHA256_DIGEST_LENGTH);
+            const auto digest = HMAC(EVP_sha256(), decodedKey.c_str(), decodedKey.size(), (unsigned char *) msg.c_str(), msg.size(), NULL, NULL);
+            const auto cb_access_sign = libbase64::encode<std::string, char, unsigned char, true>(digest, SHA256_DIGEST_LENGTH);
 
-            return AuthHeader(cb_access_sign, m_settings.m_apikey, m_settings.m_passphrase, cb_access_timestamp);
+            return CRYPTO::AuthHeader(cb_access_sign, m_settings.m_apikey, m_settings.m_passphrase, cb_access_timestamp);
         }
 
         //----------------------------------------------------------------------
@@ -106,7 +102,7 @@ namespace CORE {
                           channels + "\"] }";
             } else {
                 // Use direct feed, authentication attributes required..
-                AuthHeader header = GetAuthHeader();
+                CRYPTO::AuthHeader header = GetAuthHeader();
                 payload =
                         "{ \"type\": \"" + method + "\", \"product_ids\": [" + prods + "], \"channel\":  \"" + channels
                         + "\" , \"signature\": \"" + std::get<0>(
