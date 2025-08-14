@@ -32,8 +32,8 @@ std::string RestBase::ExecuteWebRequest(const std::string &url, const std::strin
 		{
 			customizeRequestPathFunc(path);
 		}
-		Poco::Net::Context::Ptr
-				ctx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", Poco::Net::Context::VerificationMode::VERIFY_NONE, 9, true);
+
+		Poco::Net::Context::Ptr	ctx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", Poco::Net::Context::VerificationMode::VERIFY_NONE, 9, true);
 		
 		Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort(), ctx);
 		Poco::Net::HTTPRequest request(requestType, path, Poco::Net::HTTPMessage::HTTP_1_1);

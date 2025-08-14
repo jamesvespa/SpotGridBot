@@ -16,7 +16,8 @@ namespace CORE {
         o.status = OrderStatus::NEW;
         m_orders[o.id] = o;
 
-        m_connectionManager->OrderConnection()->SendOrder(cp, side, RESTAPI::EOrderType::Limit, UTILS::TimeInForce::GTC, price, quantity);
+        CRYPTO::JSONDocument response(m_connectionManager->OrderConnection()->SendOrder(cp, side, RESTAPI::EOrderType::Limit, UTILS::TimeInForce::GTC, price, quantity));
+
         Logger::info("Placed order " + o.id + " " + (side==UTILS::Side::BUY ? "BUY" : "SELL")
                      + " @" + std::to_string(price) + " qty=" + std::to_string(quantity));
 

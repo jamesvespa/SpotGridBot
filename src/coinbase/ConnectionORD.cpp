@@ -117,6 +117,24 @@ const AuthHeader ConnectionORD::GetAuthHeader(const std::string& requestPath, co
 }
 
 //------------------------------------------------------------------------------
+std::string ConnectionORD::GetOrders()
+{
+	const std::string requestPath("orders/historical/batch");
+	CRYPTO::AuthHeader header = GetAuthHeader(requestPath, "GET");
+
+	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_GET, [&](std::string &path)
+	{
+	}, [&](Poco::Net::HTTPRequest &request)
+						{
+							request.add("content-type", "application/json");
+							request.add("CB-ACCESS-KEY", std::get<CB_ACCESS_KEY>(header));
+							request.add("CB-ACCESS-PASSPHRASE",  std::get<CB_ACCESS_PASSPHRASE>(header));
+							request.add("CB-ACCESS-SIGN", std::get<CB_ACCESS_SIGN>(header));
+							request.add("CB-ACCESS-TIMESTAMP", std::get<CB_ACCESS_TIMESTAMP>(header));
+						});
+}
+
+//------------------------------------------------------------------------------
 std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, const UTILS::Side side, const RESTAPI::EOrderType orderType,
 								  const UTILS::TimeInForce timeInForce, const double price, const double quantity, const std::string &clientOrderId)
 {

@@ -22,6 +22,8 @@ class ConnectionORD : public CORE::RESTAPI::RestConnectionBase
 {
 public:
 	ConnectionORD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager);
+
+	std::string GetOrders();
 	
 	std::string SendOrder(const UTILS::CurrencyPair &instrument, const UTILS::Side side, const RESTAPI::EOrderType orderType,
 						  const UTILS::TimeInForce timeInForce, const double price, const double quantity,
