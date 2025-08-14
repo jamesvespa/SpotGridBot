@@ -2,7 +2,7 @@
 #include "binance/ConnectionMD.h"
 #include "JSONDocument.h"
 
-namespace MERCURY::TEST {
+namespace TEST {
 using namespace CORE::CRYPTO;
 
 namespace {
@@ -198,4 +198,4 @@ TEST(MessageProcessor, Test_ProcessMessage_Fails_WithNullMessage)
 	ASSERT_EQ("NULL message", res.ErrorMessage());
 }
 
-} // ns MERCURY::TEST
+} // ns TEST

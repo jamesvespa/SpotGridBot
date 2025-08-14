@@ -5,7 +5,7 @@
 #include "TestHelpers.h"
 #include "Options.h"
 
-namespace MERCURY::TEST::COINBASE {
+namespace TEST::COINBASE {
 
 using TestConnectionMD = TestConnectionMD<CORE::COINBASE::ConnectionMD>;
 

@@ -7,7 +7,7 @@
 #include "Crypto.h"
 #include "JSONDocument.h"
 
-namespace MERCURY::TEST {
+namespace TEST {
 //----------------------------------------------------------------------------
 TEST(COMMON, Test_CreateEmptyExecutionReportData)
 {

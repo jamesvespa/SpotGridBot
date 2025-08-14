@@ -16,7 +16,7 @@
 #include "SchemaDefs.h"
 
 
-namespace MERCURY::TEST {
+namespace TEST {
 	using namespace CORE;
 
 	//--------------------------------------------------------------------------

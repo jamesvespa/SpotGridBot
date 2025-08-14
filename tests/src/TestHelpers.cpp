@@ -19,7 +19,7 @@ static PocoInitializer pi;
 
 //------------------------------------------------------------------------------
 /*! \brief Registers crypto currencies used in the tests */
-void MERCURY::TEST::RegisterTestCurrencies()
+void TEST::RegisterTestCurrencies()
 {
 	UTILS::CurrencyPair::InitializeCurrencyConfigs(PATH_TEST_CURRENCYCONFIG);
 }
@@ -27,7 +27,7 @@ void MERCURY::TEST::RegisterTestCurrencies()
 
 //------------------------------------------------------------------------------
 /*! \brief Returns true if fld can be found in fields. If exact == true, full string is searched */
-bool MERCURY::TEST::CheckRequestField(const Poco::StringTokenizer &fields, const std::string &fld, bool exact)
+bool TEST::CheckRequestField(const Poco::StringTokenizer &fields, const std::string &fld, bool exact)
 {
 	return std::find_if(fields.begin(), fields.end(), [exact, &fld](const auto &elem)
 	{

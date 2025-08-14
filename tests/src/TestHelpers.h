@@ -7,7 +7,7 @@
 
 #include "unittest.h"
 
-namespace MERCURY::TEST {
+namespace TEST {
 const std::string ConfigPath {PATH_TEST_CONFIG};
 const std::string LoggingProperties {PATH_TEST_LOGGINGPROPERTIES};
 
