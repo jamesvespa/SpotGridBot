@@ -138,19 +138,27 @@ std::string ConnectionORD::GetOrders()
 std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, const UTILS::Side side, const RESTAPI::EOrderType orderType,
 								  const UTILS::TimeInForce timeInForce, const double price, const double quantity, const std::string &clientOrderId)
 {
-	const std::string requestPath("orders/historical/batch");
- 	CRYPTO::AuthHeader header = GetAuthHeader(requestPath, "GET");
+	const std::string requestPath("orders");
+ 	CRYPTO::AuthHeader header = GetAuthHeader(requestPath, "POST");
+	std::string body;
 
-	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_GET, [&](std::string &path)
+	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_POST, [&](std::string &path)
 	{
-	}, [&](Poco::Net::HTTPRequest &request)
+	},
+	[&](Poco::Net::HTTPRequest &request)
 						{
 							request.add("content-type", "application/json");
 							request.add("CB-ACCESS-KEY", std::get<CB_ACCESS_KEY>(header));
 							request.add("CB-ACCESS-PASSPHRASE",  std::get<CB_ACCESS_PASSPHRASE>(header));
 							request.add("CB-ACCESS-SIGN", std::get<CB_ACCESS_SIGN>(header));
 							request.add("CB-ACCESS-TIMESTAMP", std::get<CB_ACCESS_TIMESTAMP>(header));
-						});
+						},
+	[&](const Poco::Net::HTTPResponse &response)
+	{
+	},
+	[&body](std::ostream &ostr) {
+		ostr << body;
+	});
  }
 
 
@@ -203,10 +211,11 @@ std::string ConnectionORD::QueryOrderOrCancel(const ERequestType requestType, co
 // Binance web request wrapper
 std::string ConnectionORD::DoWebRequest(const std::string &url, const std::string &requestType,
 									 std::function<void(std::string &path)> customizeRequestPathFunc,
-									 std::function<void(Poco::Net::HTTPRequest &request)> customizeRequestFunc)
+									 std::function<void(Poco::Net::HTTPRequest &request)> customizeRequestFunc,
+									 std::function<void(const Poco::Net::HTTPResponse &response)> customizeResponseFunc,
+									 std::function<void(std::ostream &)> handleRequestStreamFunc)
 {
-	return ExecuteWebRequest(url, requestType, customizeRequestPathFunc, customizeRequestFunc,
-							 [](const Poco::Net::HTTPResponse &aRespons){});
+	return ExecuteWebRequest(url, requestType, customizeRequestPathFunc, customizeRequestFunc, customizeResponseFunc, handleRequestStreamFunc);
 }
 
 //------------------------------------------------------------------------------

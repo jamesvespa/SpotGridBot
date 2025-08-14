@@ -47,7 +47,9 @@ protected:
 	// Web request wrapper
 	std::string DoWebRequest(const std::string &url, const std::string &requestType,
 							 std::function<void(std::string &path)> customizeRequestPathFunc = nullptr,
-							 std::function<void(Poco::Net::HTTPRequest &request)> customizeRequestFunc = nullptr);
+							 std::function<void(Poco::Net::HTTPRequest &request)> customizeRequestFunc = nullptr,
+							 std::function<void(const Poco::Net::HTTPResponse &response)> customizeResponseFunc = nullptr,
+							 std::function<void(std::ostream &)> handleRequestStreamFunc = nullptr);
 
 	virtual void OnMsgResult(const std::string &result, const int id, const UTILS::BoolResult &res);
 	virtual void OnMsgError(const int errCode, const std::string &errMsg, const UTILS::BoolResult &res);
