@@ -7,6 +7,8 @@
 #include "Poco/URI.h"
 #include "coinbase/ConnectionORD.h"
 
+#include "libbase64.hpp"
+
 namespace CORE {
 	class ConnectionManager;
 }
@@ -17,9 +19,6 @@ using namespace CORE::CRYPTO;
 
 namespace CORE {
 namespace COINBASE {
-////////////////////////////////////////////////////////////////////////////////
-// ConnectionTT
-////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------------------------
 ConnectionORD::ConnectionORD(const CRYPTO::Settings &settings, const std::string &loggingPropsPath, const ConnectionManager& connectionManager)
@@ -100,36 +99,41 @@ void ConnectionORD::OnMsgError(const int errCode, const std::string &errMsg, con
 	poco_error_f2(logger(), "received 'error': code='%s', msg='%s'", std::to_string(errCode), errMsg);
 }
 
+//Create a Market Data authentication signature
+const AuthHeader ConnectionORD::GetAuthHeader(const std::string& requestPath, const std::string& accessMethod)
+{
+	auto cb_access_timestamp = std::to_string(UTILS::CurrentTimestamp() / 1000000000); //as seconds
+	auto cb_access_method{accessMethod};
+	auto cb_access_request_path{requestPath};
+
+	//Now build the signature...
+	auto msg = cb_access_timestamp + cb_access_method + cb_access_request_path;
+
+	const auto decodedKey = libbase64::decode<std::string, char, unsigned char, true>(m_settings.m_secretkey);
+	const auto digest = HMAC(EVP_sha256(), decodedKey.c_str(), decodedKey.size(), (unsigned char *) msg.c_str(), msg.size(), NULL, NULL);
+	const auto cb_access_sign = libbase64::encode<std::string, char, unsigned char, true>( digest, SHA256_DIGEST_LENGTH);
+
+	return AuthHeader(cb_access_sign, m_settings.m_apikey, m_settings.m_passphrase, cb_access_timestamp);
+}
+
 //------------------------------------------------------------------------------
 std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, const UTILS::Side side, const RESTAPI::EOrderType orderType,
 								  const UTILS::TimeInForce timeInForce, const double price, const double quantity, const std::string &clientOrderId)
 {
-	const auto isMarketOrder = orderType == RESTAPI::EOrderType::Market || !price;
-	std::string queryString = "symbol=" + instrument.BaseCCY().ToString() + instrument.QuoteCCY().ToString();
-	queryString += "&side=" + std::string(side.Buy() ? "BUY" : "SELL");
-	queryString += "&type=" + std::string(isMarketOrder ? "MARKET" : "LIMIT");
-	if (!isMarketOrder)
+	const std::string requestPath("orders/historical/batch");
+ 	CRYPTO::AuthHeader header = GetAuthHeader(requestPath, "GET");
+
+	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_GET, [&](std::string &path)
 	{
-		queryString += "&timeInForce=" + timeInForce.ToString();
-		queryString += "&price=" + UTILS::to_string_with_precision<double>(price, instrument.Precision());
-	}
-	queryString += "&quantity=" + std::to_string(quantity);
-	if (!clientOrderId.empty())
-	{
-		queryString += "&newClientOrderId=" + clientOrderId;
-	}
-	queryString += "&recvWindow=" + std::to_string(m_settings.m_recvWindow);
-	queryString += "&timestamp=" + std::to_string(UTILS::CurrentTimestamp() / 1000000); // timestamp must be in ms
-	const auto signature = CORE::CRYPTO::TOOLS::EncryptWithHMAC(m_settings.m_secretkey, queryString);
-	
-	return DoWebRequest(m_settings.m_orders_http, Poco::Net::HTTPRequest::HTTP_POST, [&queryString, &signature](std::string &path)
-	{
-		path += "?" + queryString + "&signature=" + signature;
-	}, [this](Poco::Net::HTTPRequest &request)
+	}, [&](Poco::Net::HTTPRequest &request)
 						{
-							request.add("X-MBX-APIKEY", m_settings.m_apikey);
+							request.add("content-type", "application/json");
+							request.add("CB-ACCESS-KEY", std::get<CB_ACCESS_KEY>(header));
+							request.add("CB-ACCESS-PASSPHRASE",  std::get<CB_ACCESS_PASSPHRASE>(header));
+							request.add("CB-ACCESS-SIGN", std::get<CB_ACCESS_SIGN>(header));
+							request.add("CB-ACCESS-TIMESTAMP", std::get<CB_ACCESS_TIMESTAMP>(header));
 						});
-}
+ }
 
 
 //------------------------------------------------------------------------------

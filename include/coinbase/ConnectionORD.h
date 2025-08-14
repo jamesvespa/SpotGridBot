@@ -7,6 +7,11 @@ namespace CORE {
 	class ConnectionManager;
 }
 
+constexpr int CB_ACCESS_SIGN=0;
+constexpr int CB_ACCESS_KEY=1;
+constexpr int CB_ACCESS_PASSPHRASE=2;
+constexpr int CB_ACCESS_TIMESTAMP= 3;
+
 namespace CORE {
 namespace COINBASE {
 
@@ -35,6 +40,7 @@ public:
 	static std::tuple<char, char> TranslateOrderStatus(const std::string &status);
 
 protected:
+	const CRYPTO::AuthHeader GetAuthHeader(const std::string& requestPath, const std::string& accessMethod);
 
 	// Web request wrapper
 	std::string DoWebRequest(const std::string &url, const std::string &requestType,

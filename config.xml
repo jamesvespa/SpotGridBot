@@ -1,10 +1,5 @@
 <Configuration>
 
-<!--    Binance API Key-->
-<!--    KWBUPUMW7F7JAP1SijCl2pmoce0fvKv5OZsSU11nsPSf5hot2oPDadfw6dRxZGEg-->
-<!--    Secret Key-->
-<!--    8iWk7y5yuvUxOKwKa8EbYXffgzkmqios34FHzRFgHCaAKyfa737IMois5e2FZgnn-->
-
     <SessionConfig>
 <!--        <Session name="BINANCEMD"-->
 <!--                     num_id="1"-->
@@ -30,15 +25,11 @@
 
         <Session name="COINBASEMD"
                      num_id="3"
-                     _host="advanced-trade-ws.coinbase.com"
-                     _api_key_trade="organizations/a9df3ebf-0eb3-4667-8f8c-493ea6e5f73f/apiKeys/ea944a2e-fc2f-41b4-8044-93b390e94d48"
-                     _secret_key_trade="-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIEyq/hCJbVCT8KwLc9Wu2hZdc8HV9BYbwr0nXx6jBU9aoAoGCCqGSM49\nAwEHoUQDQgAEPVjaKvnipYVJh3UGdEppn6A0kMdGuURVzdigdzOlsZ2fTL3L86R/\nugxBSDSvt0YEd4CaJIRc8NIbL3HkgnjOjQ==\n-----END EC PRIVATE KEY-----\n"
                      host="ws-feed-public.sandbox.exchange.coinbase.com"
-                     __host="ws-feed.exchange.coinbase.com"
                      api_key=""
                      secret_key=""
                      port="443"
-                     channels="level2_batch,heartbeat"
+                     channels="level2_batch"
                      schema="Coinbase:MD"
                      instruments="ETH/BTC"
         />
@@ -46,12 +37,11 @@
         <Session name="COINBASEORD"
                      num_id="4"
                      protocol="rest"
-                     host="https://api-public.sandbox.exchange.coinbase.com"
-                     _host="https://api.exchange.coinbase.com/"
-                     api_key="oAXa9pSRamuasbEwGmfbxfQt0+VKiaqIqopQg3JLAEBsxI9RLyt+9j0cSh3Bb2siLTk+8tdVjBWvFGEpj/KI/A=="
-                     secret_key="oAXa9pSRamuasbEwGmfbxfQt0+VKiaqIqopQg3JLAEBsxI9RLyt+9j0cSh3Bb2siLTk+8tdVjBWvFGEpj/KI/A=="
+                     orders_http="https://api-sandbox.coinbase.com/api/v3/brokerage/"
+                     _api_key="e76bd7dcb86bc4f89689a210d6a64c70"
+                     _secret_key="y/NKb3m8MbaDIo/xW4JCh4/F/svi3TxoESMVF742RfUA8iYrOAsZTlbkrZ6U6bUWBtkhEDxE46EKcJ4pKNFqow=="
                      port="443"
-                     password="k1y9daypbz8k"
+                     passphrase="thsv5x4pwhmo"
                      schema="Coinbase:ORD"
         />
 
