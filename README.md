@@ -1,14 +1,8 @@
-## dependencies
-| Utils | MercuryProtobuf | MercuryMosquitto | Data |
-|--------------|-----------------|------------------|-------------|
-| ![](https://gitlab.bbf-it.at/mercury/mercurybaseUtils/badges/master/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercuryprotobuf/badges/master/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercurymosquitto/badges/master/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercurydata/badges/master/pipeline.svg) |
-
-| MercuryController | MercuryFix | MercuryTrans | MercuryAdpt |
-|-------------------|------------|--------------|-------------|
-| ![](https://gitlab.bbf-it.at/mercury/mercurycontroller/badges/main/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercuryfix/badges/master/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercurytrans/badges/master/pipeline.svg) | ![](https://gitlab.bbf-it.at/mercury/mercuryadpt/badges/master/pipeline.svg) |
 
 ## commit tags
 taken from https://udacity.github.io/git-styleguide/
+
+* Coinbase grid trading bot - places by and sell orders around a spread.
 
 * feat: a new feature
 * fix: a bug fix
