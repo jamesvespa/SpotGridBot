@@ -5,8 +5,7 @@
  * @copyright   (c) 2020 BBF-IT
 */
 
-#ifndef MERCURYUTILS_DATACONTEXT_H
-#define MERCURYUTILS_DATACONTEXT_H
+#pragma once
 
 //Stub class to be used to seed an empty context parameter (second sortbook template arghument)..
 namespace ORDERBOOK
@@ -16,7 +15,3 @@ namespace ORDERBOOK
 
     };
 }
-
-
-
-#endif //MERCURYUTILS_DATACONTEXT_H

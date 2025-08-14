@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2018-09-12
- * @copyright   (c) 2018 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_LOCKABLE_H
-#define MERCURYUTILS_LOCKABLE_H
+#pragma once
 
 #include <chrono>
 #include <mutex>
@@ -132,5 +124,3 @@ public:
 };
 
 }
-
-#endif //MERCURYUTILS_LOCKABLE_H

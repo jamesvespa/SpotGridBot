@@ -23,7 +23,6 @@ const char* const CFG_ATTR_ACTIVE = "active";
 * To be used to log latency metrics in a standardized form
 * Latency: <metric name> -> <field1 name>:<field1 value>[, <field2 name>:<field2 value>, <field2 name>:<field2 value>...]
 * Example:
-*    Latency: MercuryFix.SessionBase::handle_application.Delay -> total:255555, long_delays:37777, avg:4002000, min:322222, max:4500034
 */
 class CLatencyEntry final {
 public:

@@ -1,9 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2019-01-18
- * @copyright   (c) 2019 BBF-IT
-*/
+#pragma once
 
 #include <string>
 
@@ -11,8 +6,6 @@
 
 #include "Utils/Lockable.h"
 
-#ifndef MERCURYUTILS_ERRORHANDLER_H
-#define MERCURYUTILS_ERRORHANDLER_H
 
 namespace Poco {
 class Logger;
@@ -254,4 +247,3 @@ private:
 
 } // namespace
 
-#endif //MERCURYUTILS_ERRORHANDLER_H

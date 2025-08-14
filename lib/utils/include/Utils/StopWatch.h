@@ -1,12 +1,5 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2018-15-30
- * @copyright   (c) 2018 BBF-IT
-*/
+#pragma once
 
-#ifndef MERCURYUTILS_STOPWATCH_H
-#define MERCURYUTILS_STOPWATCH_H
 
 #include <memory>
 #include <time.h>
@@ -192,4 +185,3 @@ private:
 
 } // namespace CORE
 
-#endif //MERCURYUTILS_STOPWATCH_H

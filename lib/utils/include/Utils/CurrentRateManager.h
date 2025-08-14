@@ -5,8 +5,7 @@
  * @copyright   (c) 2018 BBF-IT
 */
 
-#ifndef MERCURYUTILS_CURRENTRATEMANAGER_H
-#define MERCURYUTILS_CURRENTRATEMANAGER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -187,4 +186,3 @@ private:
 
 } // namespace CORE
 
-#endif //MERCURYUTILS_CURRENTRATEMANAGER_H

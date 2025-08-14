@@ -1,10 +1,4 @@
-//
-// Created by james aleksandra on 8/30/23.
-//
-
-#ifndef MERCURYUTILS_ONETOONEQUEUE_H
-#define MERCURYUTILS_ONETOONEQUEUE_H
-
+#pragma once
 
 #include <memory>
 #include <atomic>
@@ -242,5 +236,3 @@ private:
 };
 
 } // namespace UTILS
-
-#endif //MERCURYUTILS_ONETOONEQUEUE_H

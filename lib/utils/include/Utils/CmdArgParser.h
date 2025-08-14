@@ -8,8 +8,8 @@
 */
 
 
-#ifndef MERCURYUTILS_CMDARGPARSER_H
-#define MERCURYUTILS_CMDARGPARSER_H
+#pragma once
+
 
 #include <string>
 #include <vector>
@@ -154,6 +154,3 @@ private:
 
 }
 
-
-
-#endif //MERCURYUTILS_CMDARGPARSER_H

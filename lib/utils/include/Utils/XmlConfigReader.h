@@ -1,13 +1,4 @@
-/**
- * @file
- * @author      thomas <thomas.grim-schlink@bbf-it.at>
- * @date        2020-12-20
- * @copyright   (c) 2020 BBF-IT
- * @brief		cmd argument parser
-*/
-
-#ifndef MERCURYUTILS_XMLCONFIGREADER_H
-#define MERCURYUTILS_XMLCONFIGREADER_H
+#pragma once
 
 #include <Poco/DOM/AutoPtr.h>
 #include <Poco/DOM/Document.h>
@@ -176,5 +167,3 @@ private:
 };
 
 }
-
-#endif //MERCURYUTILS_XMLCONFIGREADER_H

@@ -8,8 +8,7 @@
  */
 
 
-#ifndef MERCURYUTILS_CONTEXTBASE_H
-#define MERCURYUTILS_CONTEXTBASE_H
+#pragma once
 
 #include <string>
 #include <atomic>
@@ -114,4 +113,3 @@ private:
 
 } // namespace CORE
 
-#endif //MERCURYUTILS_CONTEXTBASE_H

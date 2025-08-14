@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2018-02-09
- * @copyright   (c) 2018 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_UTILS_H
-#define MERCURYUTILS_UTILS_H
+#pragma once
 
 #include <cmath>
 #include <fstream>
@@ -673,5 +665,3 @@ private:
 
 
 } // ns UTILS
-
-#endif //MERCURYUTILS_UTILS_H

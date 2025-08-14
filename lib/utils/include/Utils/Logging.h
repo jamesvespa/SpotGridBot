@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2017-11-21
- * @copyright   (c) 2017 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_LOGGING_H
-#define MERCURYUTILS_LOGGING_H
+#pragma once
 
 #include <string>
 
@@ -38,5 +30,3 @@ private:
 };
 
 }
-
-#endif //MERCURYUTILS_LOGGING_H

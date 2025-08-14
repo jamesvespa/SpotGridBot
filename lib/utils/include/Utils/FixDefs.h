@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2018-11-09
- * @copyright   (c) 2020 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_FIXDEFS_H
-#define MERCURYUTILS_FIXDEFS_H
+#pragma once
 
 #include <string>
 #include <map>
@@ -133,6 +125,3 @@ enum class MDUpdateType : int {
 
 }
 
-
-
-#endif //MERCURYUTILS_FIXDEFS_H

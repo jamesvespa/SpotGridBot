@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      thomas <thomas.grim-schlink@bbf-it.at>
- * @date        18.05.21
- * @copyright   (c) 2021 BBF-IT All rights reserved.
- */
-
-#ifndef MERCURYUTILS_SIGNAL_H
-#define MERCURYUTILS_SIGNAL_H
+#pragma once
 
 
 #include <functional>
@@ -111,4 +103,3 @@ private:
 
 }
 
-#endif //MERCURYUTILS_SIGNAL_H

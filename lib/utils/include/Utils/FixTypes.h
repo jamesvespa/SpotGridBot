@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2018-06-04
- * @copyright   (c) 2018 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_FIXTYPES_H
-#define MERCURYUTILS_FIXTYPES_H
+#pragma once
 
 #include <string>
 #include <map>
@@ -552,6 +544,3 @@ struct NormalizedERData
 
 }
 
-
-
-#endif //MERCURYUTILS_FIXTYPES_H

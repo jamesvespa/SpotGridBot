@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2019-02-25
- * @copyright   (c) 2019 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_RESULT_H
-#define MERCURYUTILS_RESULT_H
+#pragma once
 
 #include <optional>
 
@@ -251,4 +243,3 @@ public:
 
 } // CORE
 
-#endif //MERCURYUTILS_RESULT_H

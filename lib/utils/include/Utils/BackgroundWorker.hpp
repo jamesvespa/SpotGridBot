@@ -1,7 +1,7 @@
 
 
-#ifndef MERCURYUTILS_BACKGROUNDWORKER_H
-#define MERCURYUTILS_BACKGROUNDWORKER_H
+#pragma once
+
 
 #include <pthread.h>
 #include <algorithm>
@@ -535,5 +535,3 @@ private:
 };
 
 } // namespace CORE
-
-#endif //MERCURYUTILS_BACKGROUNDWORKER_H

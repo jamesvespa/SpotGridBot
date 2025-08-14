@@ -1,4 +1,4 @@
-
+#pragma once
 
 #include <thread>
 #include <atomic>
@@ -9,8 +9,6 @@
 #include "Result.h"
 #include "Lockable.h"
 
-#ifndef MERCURYUTILS_TIMER_H
-#define MERCURYUTILS_TIMER_H
 
 //#define TEST_THREADS
 
@@ -287,4 +285,3 @@ void TimerTest(size_t threads, int64_t testDuration, const std::vector<TestTaskD
 
 } // namespace CORE
 
-#endif //CRTRNS_TIMER_H

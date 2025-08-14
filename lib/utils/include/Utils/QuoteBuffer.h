@@ -1,12 +1,4 @@
-/**
- * @file
- * @author      james <james.doll@bbf-it.at>
- * @date        2020-11-25
- * @copyright   (c) 2020 BBF-IT
-*/
-
-#ifndef MERCURYUTILS_QUOTEBUFFER_H
-#define MERCURYUTILS_QUOTEBUFFER_H
+#pragma once
 
 #include <cstring> //memcpy
 #include <memory>
@@ -87,4 +79,3 @@ namespace UTILS {
     };
 
 }
-#endif //MERCURYUTILS_QUOTEBUFFER_H

@@ -1,7 +1,7 @@
 
 
-#ifndef MERCURYUTILS_BGWMONITOR_H
-#define MERCURYUTILS_BGWMONITOR_H
+#pragma once
+
 
 #include <vector>
 #include <mutex>
@@ -238,5 +238,3 @@ protected: // has to be visible for unit testing
 };
 
 } // namespace UTILS
-
-#endif //MERCURYUTILS_BGWMONITOR_H
