@@ -7,6 +7,7 @@
 #include "Poco/URI.h"
 #include "coinbase/ConnectionORD.h"
 
+#include "Crypto.h"
 #include "libbase64.hpp"
 
 namespace CORE {
@@ -140,7 +141,20 @@ std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, cons
 {
 	const std::string requestPath("orders");
  	CRYPTO::AuthHeader header = GetAuthHeader(requestPath, "POST");
-	std::string body;
+	std::string body("{ \"client_order_id\": \"0000-00000-000000\", \"product_id\":");
+	body+="\""+TranslateSymbolToExchangeSpecific(instrument)+"\"";
+	body+=",\"side\":";
+	body+=side==UTILS::Side::BUY?"\"BUY\"":"\"SELL\"";
+	body+=",\"order_configuration\":{";
+	body+=timeInForce==UTILS::TimeInForce::GTC ? "\"limit_limit_gtc\":{" : "\"limit_limit_ioc\":{";
+	body+="\"limit_price\":";
+	body+="\""+std::to_string(price)+"\"";
+	body+=",\"quote_size\":";
+	body+="\""+std::to_string(quantity)+"\"";
+	body+=",\"base_size\":";
+	body+="\""+std::to_string(double(quantity/price))+"\"";
+	body+=",\"post_only\":false";
+	body+="}}}";
 
 	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_POST, [&](std::string &path)
 	{

@@ -18,8 +18,7 @@ namespace CORE {
 
         CRYPTO::JSONDocument response(m_connectionManager->OrderConnection()->SendOrder(cp, side, RESTAPI::EOrderType::Limit, UTILS::TimeInForce::GTC, price, quantity));
 
-        Logger::info("Placed order " + o.id + " " + (side==UTILS::Side::BUY ? "BUY" : "SELL")
-                     + " @" + std::to_string(price) + " qty=" + std::to_string(quantity));
+        Logger::info("Placed order " + o.id + " " + (side==UTILS::Side::BUY ? "BUY" : "SELL") + " @" + std::to_string(price) + " qty=" + std::to_string(quantity));
 
         return o.id;
     }
