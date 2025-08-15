@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <cmath>
 #include <functional>
 #include <thread>
 #include <future>
@@ -82,6 +83,12 @@ inline int64_t CurrentTimestamp() { return 0; }
 std::string NanosecondsToString(int64_t ns);
 
 int64_t StringToNanoseconds(const std::string &str);
+
+inline double AddDecimalPlaces(int num, int precision)
+{
+	double denominator = pow(10, precision);
+	return static_cast<double>(num) / denominator;
+}
 
 template<typename T>
 std::string to_string_with_precision(const T a_value, const int n = 6)

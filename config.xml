@@ -31,7 +31,7 @@
                      port="443"
                      channels="level2_batch"
                      schema="Coinbase:MD"
-                     instruments="ETH/BTC"
+                     instruments="BTC/USD"
         />
 
         <Session name="COINBASEORD"

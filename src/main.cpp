@@ -52,20 +52,24 @@ int main(int argc, char** argv)
         GridConfig gcfg;
         gcfg.pair = cfg->GetValue<std::string>("pair");
         auto cp = UTILS::CurrencyPair(gcfg.pair);
-        gcfg.gridBasePrice = cp.CpipToDbl(m_orderBook->GetMidPrice(cp)); //set the price of the bot from the order book.
+        if (gcfg.gridBasePrice == 0) {
+            gcfg.gridBasePrice =  AddDecimalPlaces(m_orderBook->GetMidPrice(cp), cp.Precision()); //set the price of the bot from the order book.
+        }
         gcfg.levelsAbove = cfg->GetValue<int>("levelsAbove");
         gcfg.levelsBelow = cfg->GetValue<int>("levelsBelow");
         gcfg.stepPercent = cfg->GetValue<double>("stepPercent");
         gcfg.perOrderQty = cfg->GetValue<double>("perOrderQty");
         gcfg.maxPositionBtc = cfg->GetValue<int>("maxPositionBtc");
 
-        STRATEGY::GridStrategy strat(m_orderManager, gcfg);
-        strat.start();
+        if (gcfg.gridBasePrice > 0) {
+            STRATEGY::GridStrategy strat(m_orderManager, gcfg);
+            strat.start();
 
-        //strat.onTicker();
+            //strat.onTicker();
 
-       	poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");
-        std::cin.get();
+            poco_information(logger, "SpotGridBot has started - press <enter> to exit ..");
+            std::cin.get();
+        }
     }
     catch (Poco::Exception& e) // explicitly catch poco exceptions
     {

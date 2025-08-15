@@ -94,7 +94,7 @@ namespace CORE {
                 prods += (prods.empty() ? "" : ",") + std::string("\"") + inst + "\"";
             }
 
-            std::string payload; /*="{\"type\": \"subscribe\", \"product_ids\": [\"BTC-USD\"], \"channel\": \"level2\"}"; */
+            std::string payload;
 
             if (m_settings.m_apikey.empty() && m_settings.m_secretkey.empty() && m_settings.m_passphrase.empty()) {
                 //use the public feed, no authentication required..
