@@ -64,11 +64,11 @@ namespace STRATEGY {
                 // Calculate the next sell price (one step above)
                 double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.m_stepPercent);
 
-                // Check if holding too much BTC before selling
+                // Check if holding too much 'base currency' before selling
                 double btc = m_orderManager->GetBalance(m_cp.BaseCCY().ToString());
                 if (btc > m_cfg.m_maxPosition + 1e-12)
                 {
-                    Logger::warn("Max position exceeded, not placing hedge sell");
+                    Logger::warn("Max 'base currency' position exceeded, not placing hedge sell");
                 }
                 else
                 {
@@ -89,7 +89,7 @@ namespace STRATEGY {
                 double cost = buyPrice * m_orderMeta[oid].qty;
                 if (usdt + 1e-12 < cost)
                 {
-                    Logger::warn("Insufficient 'terminating currency' to place rebuy");
+                    Logger::warn("Insufficient 'terminating currency' to place re-buy");
                 }
                 else
                 {

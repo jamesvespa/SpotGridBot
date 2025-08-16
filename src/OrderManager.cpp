@@ -7,20 +7,28 @@ namespace CORE {
     std::string OrderManager::PlaceLimitOrder(const UTILS::CurrencyPair cp, UTILS::Side side, double price, double quantity)
     {
         std::lock_guard<std::mutex> g(m_mutex);
-        Order o;
-        o.id = "o" + std::to_string(nextId++);
-        o.side = side;
-        o.price = price;
-        o.quantity = quantity;
-        o.filled = 0.0;
-        o.status = OrderStatus::NEW;
-        m_orders[o.id] = o;
 
         CRYPTO::JSONDocument response(m_connectionManager->OrderConnection()->SendOrder(cp, side, RESTAPI::EOrderType::Limit, UTILS::TimeInForce::GTC, price, quantity));
 
-        Logger::info("Placed order " + o.id + " " + (side==UTILS::Side::BUY ? "BUY" : "SELL") + " @" + std::to_string(price) + " qty=" + std::to_string(quantity));
+        if (response.GetValue<std::string>("status").c_str()=="true")
+        {
+            Order order;
+            order.side = side;
+            order.price = price;
+            order.quantity = quantity;
+            order.filled = 0.0;
+            order.status = OrderStatus::NEW;
 
-        return o.id;
+            CRYPTO::JSONDocument sr(response.GetValue<std::string>("success_response"));
+            order.id = sr.GetValue<std::string>("order_id");
+            m_orders[order.id] = order;
+
+            Logger::info("Placed order " + order.id + " " + (side==UTILS::Side::BUY ? "BUY" : "SELL") + " @" + std::to_string(price) + " qty=" + std::to_string(quantity));
+
+            return order.id;
+        }
+
+        return "";
     }
 
     bool OrderManager::CancelOrder(const UTILS::CurrencyPair cp, const std::string &orderId)
@@ -30,11 +38,11 @@ namespace CORE {
         if (!m_orders.count(orderId))
             return false;
 
-        auto &o = m_orders[orderId];
-        if (o.status == OrderStatus::FILLED || o.status == OrderStatus::CANCELED)
+        auto &order = m_orders[orderId];
+        if (order.status == OrderStatus::FILLED || order.status == OrderStatus::CANCELED)
             return false;
 
-        o.status = OrderStatus::CANCELED;
+        order.status = OrderStatus::CANCELED;
         Logger::info("Canceled order " + orderId);
 
         return true;

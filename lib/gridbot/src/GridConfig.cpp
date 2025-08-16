@@ -31,7 +31,7 @@ bool GridConfig::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 
 	 	if (auto *baseNode = UTILS::GetConfigNode(pDoc, TAG_GRID_CONFIG, &errMsg))
 	 	{
-	 		poco_information_f1(logger(), "Reading %s attributes from XML", TAG_SESSION);
+	 		poco_information_f1(logger(), "Reading %s attributes from XML", TAG_GRID_CONFIG);
 
 	 		m_instrument = UTILS::GetXmlAttribute(baseNode, ATTR_INSTRUMENT, "");
 	 		m_basePrice = std::stod(UTILS::GetXmlAttribute(baseNode, ATTR_BASE_PRICE, ""));
