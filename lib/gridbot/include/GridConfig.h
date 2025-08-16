@@ -20,6 +20,6 @@ public:
     int m_levelsBelow;
     int m_levelsAbove;
     double m_stepPercent;
-    double m_perOrderQty;
+    double m_percentOrderQty;
     double m_maxPosition;
 };

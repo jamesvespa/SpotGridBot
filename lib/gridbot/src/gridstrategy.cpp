@@ -26,17 +26,17 @@ namespace STRATEGY {
     for (int i=1;i<=m_cfg.m_levelsBelow;i++)
     {
       double price = base * (1.0 - step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::BUY, price, m_cfg.m_perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::BUY, price, m_cfg.m_percentOrderQty);
       m_activeOrders.push_back(oid);
-      m_orderMeta[oid] = {UTILS::Side::BUY, price, m_cfg.m_perOrderQty};
+      m_orderMeta[oid] = {UTILS::Side::BUY, price, m_cfg.m_percentOrderQty};
     }
 
     for (int i=1;i<=m_cfg.m_levelsAbove;i++)
     {
       double price = base * (1.0 + step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::SELL, price, m_cfg.m_perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::SELL, price, m_cfg.m_percentOrderQty);
       m_activeOrders.push_back(oid);
-      m_orderMeta[oid] = {UTILS::Side::SELL, price, m_cfg.m_perOrderQty};
+      m_orderMeta[oid] = {UTILS::Side::SELL, price, m_cfg.m_percentOrderQty};
     }
     Logger::info("Initial grid placed: " + to_string(m_activeOrders.size()) + " orders");
   }

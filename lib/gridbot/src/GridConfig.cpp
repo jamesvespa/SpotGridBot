@@ -11,16 +11,9 @@ const std::string ATTR_LEVELS_ABOVE = "levels_above";
 const std::string ATTR_STEP_PERCENT = "step_percent";
 const std::string ATTR_PERCENT_ORDER_QTY = "percent_order_qty";
 const std::string ATTR_MAX_POSITION = "max_position";
-const std::string ATTR_FEE_RATE = "fee_rate";
-const std::string ATTR_PARTIAL_FILL_MIN_PERCENT = "partial_fill_min_percent";
-const std::string ATTR_PARTIAL_FILL_MAX_PERCENT = "partial_fill_max_percent";
-const std::string ATTR_SLIPPAGE_MAX_PERCENT = "slippage_max_percent";
-const std::string ATTR_TICK_DELAY_MS = "tick_delay_ms";
-const std::string ATTR_SIMULATE_TICKS = "simulate_ticks";
 
 const std::string TAG_SESSION_CONFIG = "SessionConfig";
 const std::string TAG_SESSION = "Session";
-
 
 using namespace UTILS;
 
@@ -45,6 +38,7 @@ bool GridConfig::LoadConfig(const UTILS::XmlDocPtr &pDoc)
 	 		m_levelsBelow = std::stoi(UTILS::GetXmlAttribute(baseNode, ATTR_LEVELS_BELOW, ""));
 	 		m_levelsAbove = std::stoi(UTILS::GetXmlAttribute(baseNode, ATTR_LEVELS_ABOVE, ""));
 	 		m_stepPercent = std::stod(UTILS::GetXmlAttribute(baseNode, ATTR_STEP_PERCENT, ""));
+	 		m_percentOrderQty = std::stod(UTILS::GetXmlAttribute(baseNode, ATTR_PERCENT_ORDER_QTY, ""));
 	 		m_maxPosition = std::stod(UTILS::GetXmlAttribute(baseNode, ATTR_MAX_POSITION, ""));
 	 	}
 	 	else
