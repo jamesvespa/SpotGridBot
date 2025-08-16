@@ -199,14 +199,3 @@ private:
   double usdt = 10000.0;
   double btc = 0.0;
 };
-
-// ---------- Grid Strategy ----------
-struct GridConfig {
-  std::string pair = "BTC/USDT";
-  double gridBasePrice = 30000.0;
-  int levelsBelow = 4;
-  int levelsAbove = 4;
-  double stepPercent = 0.005;
-  double perOrderQty = 0.001;
-  double maxPositionBtc = 1.0;
-};

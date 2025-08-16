@@ -7,7 +7,6 @@ const char *const PATH_CONFIG = "config.xml";
 const char *const PATH_LOGGINGPROPS = "logging.properties";
 
 const std::string TAG_SESSION_CONFIG = "SessionConfig";
-const std::string TAG_TRANSACTION_CONFIG = "TransactionConfig";
 const std::string TAG_SESSION = "Session";
 
 const std::string ATTR_SESSION_NAME = "name";

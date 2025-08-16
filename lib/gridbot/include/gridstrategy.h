@@ -10,12 +10,13 @@
 
 #include "IOrderManager.h"
 #include "Utils/CurrencyPair.h"
+#include "GridConfig.h"
 
 namespace STRATEGY {
 
   class GridStrategy {
   public:
-    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, GridConfig cfg) : m_orderManager(orderManager), m_cfg(cfg), m_cp(m_cfg.pair)
+    GridStrategy(std::shared_ptr<CORE::IOrderManager> orderManager, const std::string& path) : m_orderManager(orderManager), m_cfg(path), m_cp(m_cfg.m_instrument)
     {
     }
 

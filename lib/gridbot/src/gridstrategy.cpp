@@ -1,11 +1,8 @@
-// grid_bot.cpp
-// PoC grid trading bot with enhanced mock: partial fills + slippage
+
 #include <bits/stdc++.h>
-#include <chrono>
-#include <thread>
+
 #include "exchange.h"
 #include "gridstrategy.h"
-
 #include "IOrderManager.h"
 #include "Utils/CurrencyPair.h"
 
@@ -23,23 +20,23 @@ namespace STRATEGY {
 
   void GridStrategy::placeInitialGrid()
   {
-    double base = m_cfg.gridBasePrice;
-    double step = m_cfg.stepPercent;
+    double base = m_cfg.m_basePrice;
+    double step = m_cfg.m_stepPercent;
 
-    for (int i=1;i<=m_cfg.levelsBelow;i++)
+    for (int i=1;i<=m_cfg.m_levelsBelow;i++)
     {
       double price = base * (1.0 - step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::BUY, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::BUY, price, m_cfg.m_perOrderQty);
       m_activeOrders.push_back(oid);
-      m_orderMeta[oid] = {UTILS::Side::BUY, price, m_cfg.perOrderQty};
+      m_orderMeta[oid] = {UTILS::Side::BUY, price, m_cfg.m_perOrderQty};
     }
 
-    for (int i=1;i<=m_cfg.levelsAbove;i++)
+    for (int i=1;i<=m_cfg.m_levelsAbove;i++)
     {
       double price = base * (1.0 + step * i);
-      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::SELL, price, m_cfg.perOrderQty);
+      string oid = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::SELL, price, m_cfg.m_perOrderQty);
       m_activeOrders.push_back(oid);
-      m_orderMeta[oid] = {UTILS::Side::SELL, price, m_cfg.perOrderQty};
+      m_orderMeta[oid] = {UTILS::Side::SELL, price, m_cfg.m_perOrderQty};
     }
     Logger::info("Initial grid placed: " + to_string(m_activeOrders.size()) + " orders");
   }
@@ -65,11 +62,11 @@ namespace STRATEGY {
             if (m_orderMeta[oid].side == UTILS::Side::BUY)
             {
                 // Calculate the next sell price (one step above)
-                double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
+                double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.m_stepPercent);
 
                 // Check if holding too much BTC before selling
                 double btc = m_orderManager->GetBalance(m_cp.BaseCCY().ToString());
-                if (btc > m_cfg.maxPositionBtc + 1e-12)
+                if (btc > m_cfg.m_maxPosition + 1e-12)
                 {
                     Logger::warn("Max position exceeded, not placing hedge sell");
                 }
@@ -85,7 +82,7 @@ namespace STRATEGY {
             else // It was a SELL order
             {
                 // Calculate the next buy price (one step below)
-                double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
+                double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.m_stepPercent);
 
                 // Check if we have enough 'terminating currency' to buy back
                 double usdt = m_orderManager->GetBalance(m_cp.QuoteCCY().ToString());
@@ -125,11 +122,11 @@ namespace STRATEGY {
                 // Place opposite hedge order for just the filled portion
                 if (m_orderMeta[oid].side == UTILS::Side::BUY)
                 {
-                    double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.stepPercent);
+                    double sellPrice = m_orderMeta[oid].price * (1.0 + m_cfg.m_stepPercent);
                     double btc = m_orderManager->GetBalance(m_cp.BaseCCY().ToString());
 
                     // Only place hedge if we’re under the max position
-                    if (btc <= m_cfg.maxPositionBtc + 1e-12)
+                    if (btc <= m_cfg.m_maxPosition + 1e-12)
                     {
                         string newId = m_orderManager->PlaceLimitOrder(m_cp, UTILS::Side::SELL, sellPrice, delta);
                         m_activeOrders.push_back(newId);
@@ -138,7 +135,7 @@ namespace STRATEGY {
                 }
                 else // partial SELL fill
                 {
-                    double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.stepPercent);
+                    double buyPrice = m_orderMeta[oid].price * (1.0 - m_cfg.m_stepPercent);
                     double usdt = m_orderManager->GetBalance(m_cp.QuoteCCY().ToString());
                     double cost = buyPrice * delta;
 
@@ -166,8 +163,7 @@ namespace STRATEGY {
     //-----------------------------
     for (auto &r : toRemove)
     {
-        m_activeOrders.erase(remove(m_activeOrders.begin(), m_activeOrders.end(), r),
-                             m_activeOrders.end());
+        m_activeOrders.erase(remove(m_activeOrders.begin(), m_activeOrders.end(), r), m_activeOrders.end());
         m_orderMeta.erase(r);
         m_knownFills.erase(r);
     }

@@ -1,5 +1,15 @@
 <Configuration>
 
+    <GridConfig
+        instrument="BTC/USDT"
+        base_price="30000.0"
+        levels_below="4"
+        levels_above="4"
+        step_percent="0.005"
+        percent_order_qty="0.001"
+        max_position="2.0"
+    />
+
     <SessionConfig>
 <!--        <Session name="BINANCEMD"-->
 <!--                     num_id="1"-->
