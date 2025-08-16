@@ -156,8 +156,9 @@ std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, cons
 	body+=",\"post_only\":false";
 	body+="}}}";
 
-	return DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_POST, [&](std::string &path)
+	std::string msg = DoWebRequest(m_settings.m_orders_http+requestPath, Poco::Net::HTTPRequest::HTTP_POST, [&](std::string &path)
 	{
+
 	},
 	[&](Poco::Net::HTTPRequest &request)
 						{
@@ -169,10 +170,15 @@ std::string ConnectionORD::SendOrder(const UTILS::CurrencyPair &instrument, cons
 						},
 	[&](const Poco::Net::HTTPResponse &response)
 	{
+		m_logger.Session().Information(response.getReason());
 	},
-	[&body](std::ostream &ostr) {
+	[&](std::ostream &ostr) {
 		ostr << body;
+		m_logger.Protocol().Outging(body);
 	});
+
+	m_logger.Protocol().Incoming(msg);
+	return msg;
  }
 
 
